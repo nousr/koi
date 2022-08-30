@@ -12,13 +12,13 @@ secho("Loading Model...", fg="yellow")
 
 # FIXME: more elegant model scope
 pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-	"CompVis/stable-diffusion-v1-4", 
-	use_auth_token=True
+    "CompVis/stable-diffusion-v1-4", use_auth_token=True
 ).to("cuda")
 
 secho("Finished!", fg="green")
 
 app = Flask(__name__)
+
 
 @app.route("/api/img2img", methods=["POST"])
 def img2img():
@@ -26,7 +26,7 @@ def img2img():
 
     r = request
     headers = r.headers
-    
+
     data = r.data
     buff = BytesIO(data)
     img = Image.open(buff).convert("RGB")
@@ -36,19 +36,18 @@ def img2img():
     with autocast("cuda"):
         return_image = pipe(
             init_image=img,
-            prompt=headers["prompt"], 
-            strength=float(headers["image_strength"]), 
-            guidance_scale=float(headers["prompt_strength"]), 
-            num_inference_steps=int(headers["steps"]), 
-            )["sample"][0]  
-        
+            prompt=headers["prompt"],
+            strength=float(headers["image_strength"]),
+            guidance_scale=float(headers["prompt_strength"]),
+            num_inference_steps=int(headers["steps"]),
+        )["sample"][0]
+
     return_bytes = BytesIO()
     return_image.save(return_bytes, format="JPEG")
     return_bytes.read()
     return_bytes.seek(0)
-  
-    return send_file(return_bytes, mimetype="image/jpeg") 
-    
+
+    return send_file(return_bytes, mimetype="image/jpeg")
 
 
 app.run(host="0.0.0.0", port=8888)

@@ -8,7 +8,14 @@ from io import BytesIO
 
 class Koi(DockWidget):
     def __init__(self):
+        """
+        This sets up a basic user interface to interact with.
+
+        TODO/FIXME: Adopt a better approach for managing the UI.
+        """
         super().__init__()
+        self.ITER = 0
+
         self.setWindowTitle("Koi")
 
         # Main WIdget ===
@@ -24,7 +31,7 @@ class Koi(DockWidget):
         self.prompt = QLineEdit()
         self.prompt.setPlaceholderText("Describe your end goal...")
         self.prompt.setText(
-            "A beautiful mountain landscape in the style of greg rutkowski, oils on canvas"
+            "A beautiful mountain landscape in the style of greg rutkowski, oils on canvas."
         )
 
         self.steps = QSpinBox(self.input_widget)
@@ -69,6 +76,9 @@ class Koi(DockWidget):
         self.mainWidget.layout().addWidget(self.dream)
 
     def canvasChanged(self, canvas):
+        """
+        This function must exists per Krita documentation.
+        """
         pass
 
     def get_extra_args(self):
@@ -90,6 +100,10 @@ class Koi(DockWidget):
     def get_endpoint(self):
         return str(self.endpoint.text())
 
+    def get_next_layer_id(self):
+        self.ITER += 1
+        return f"dream_{self.ITER}"
+
     def pingServer(self):
         # get the current layer as a I/O buffer
         image_buffer = self.layer2buffer()
@@ -107,10 +121,10 @@ class Koi(DockWidget):
         application = Krita.instance()
         doc = application.activeDocument()
         root = doc.rootNode()
-
-        dream_layer = doc.createNode("dream", "paintLayer")
+        dream_layer = doc.createNode(self.get_next_layer_id(), "paintLayer")
         root.addChildNode(dream_layer, None)
 
+        # get a pointer to the image's bits and add them to the new layer
         ptr = returned_image.bits()
         ptr.setsize(returned_image.byteCount())
         dream_layer.setPixelData(
