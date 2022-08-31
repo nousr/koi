@@ -31,12 +31,21 @@ Because this is an open source project I encourage you to try it out, break thin
 - I will update this repository with an official `requirements` list to aid in the installation process. For now, though it may require some previous knowledge to get working!
 
 ## Inference 🖌️
-...
-
+This part is easy!
+- Step 1: Create a new canvas that is **512pxx512px** and make a **single-layer** sketch *(note: these are temporary restrictions)*.
+- Step 2: Fill out the prompt field in the `koi` panel (default location is somewhere on the right of your screen).
+- Step 3: Make any additional changes you would like to the inference parameters (strength, steps, etc)
+- Step 4: Copy and paste your server's endpoint to the associated field
+- Step 5: Click `dream`!
 
 ---
 
-# TODO List:
-
-A list of features that should be tackled :)
-
+# TODO:
+- [ ] Refactor code
+- [ ] Add CI
+- [ ] Improve documentation
+- [ ] Add support for arbitrary canvas size & selection-based img2img
+- [ ] Add support for masks
+- [ ] Improve UI/UX
+- [ ] Offer more configuration options
+- [ ] Abstract away drop-in models for the server
