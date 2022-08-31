@@ -1,3 +1,4 @@
+import torch
 from urllib import request
 from flask import Flask, Response, request, send_file
 from PIL import Image
@@ -20,6 +21,16 @@ secho("Finished!", fg="green")
 app = Flask(__name__)
 
 
+def seed_everything(seed: int):
+    import random, os
+
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = True
+
 @app.route("/api/img2img", methods=["POST"])
 def img2img():
     global pipe
@@ -31,7 +42,7 @@ def img2img():
     buff = BytesIO(data)
     img = Image.open(buff).convert("RGB")
 
-    # remove alpha channel from image
+    seed_everything(int(headers["seed"]))
 
     with autocast("cuda"):
         return_image = pipe(

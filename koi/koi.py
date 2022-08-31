@@ -38,6 +38,10 @@ class Koi(DockWidget):
         self.steps.setRange(5, 150)
         self.steps.setValue(32)
 
+        self.seed = QSpinBox(self.input_widget)
+        self.seed.setRange(1, 100000000)
+        self.seed.setValue(1337)
+
         self.image_strength = QDoubleSpinBox(self.input_widget)
         self.image_strength.setRange(0.05, 0.95)
         self.image_strength.setSingleStep(0.05)
@@ -49,6 +53,7 @@ class Koi(DockWidget):
 
         self.input_layout.addRow("Prompt", self.prompt)
         self.input_layout.addRow("Steps", self.steps)
+        self.input_layout.addRow("Seed", self.seed)
         self.input_layout.addRow("Image strength", self.image_strength)
         self.input_layout.addRow("Prompt strength", self.prompt_strength)
 
@@ -91,6 +96,7 @@ class Koi(DockWidget):
         headers = {
             "prompt": str(self.prompt.text()),
             "steps": str(self.steps.value()),
+            "seed": str(self.seed.value()),
             "image_strength": str(self.image_strength.value()),
             "prompt_strength": str(self.prompt_strength.value()),
         }
