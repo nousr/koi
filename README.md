@@ -1,5 +1,7 @@
 # koi 🎣
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nousr/koi/blob/main/koi_colab_backend.ipynb)
+
 koi is an open source plug-in that allows you to use AI to accelerate your art workflow!
 
 #### Disclaimer ✋
@@ -14,6 +16,12 @@ koi is an open source plug-in that allows you to use AI to accelerate your art w
 This plug-in serves as a working example of how new A.I. models like Stable Diffusion can lower the barrier of entry to art so that anyone can enjoy making their dreams a reality!
 
 Because this is an open source project I encourage you to try it out, break things, and come back with suggestions!
+
+## Getting Started 🏁
+
+The easiest way to get started is to follow the plug-in installation process for krita. Then use the google colab backend server *(button at the top of this readme)*! This should give you a good introduction to the setup process and get you up and running fast!
+
+--- 
 
 ## Installation 🔨
 
@@ -40,6 +48,8 @@ Because this is an open source project I encourage you to try it out, break thin
   - You will also need to append the actual API endpoit you are using. By default this is `/api/img2img`
   - If you are using all of the default settings your endpoint field will look something like this `http://127.0.0.1:8888/api/img2img`
 
+---
+
 ## Inference 🖌️
 This part is easy!
 - Step 1: Create a new canvas that is **512 x 512** (px) in size and make a **single-layer** sketch *(note: these are temporary restrictions)*.
@@ -48,6 +58,7 @@ This part is easy!
 - Step 4: Copy and paste your server's endpoint to the associated field
 - Step 5: Click `dream`!
 
+---
 
 ## FAQ ❔
 
@@ -58,6 +69,7 @@ This part is easy!
 ---
 
 # TODO:
+- [x] Add colab backend example
 - [ ] Refactor code
 - [ ] Add DreamStudio API support
 - [ ] Add CI
