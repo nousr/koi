@@ -42,6 +42,14 @@ The easiest way to get started is to follow the plug-in installation process for
   
 - **Step 2**: Install this package! I recommend moving out of the diffusers folder if you haven't already (eg. `cd ..`)
   - `git clone https://github.com/nousr/koi.git`, then  `cd koi` and `pip install -e .`
+  
+> ***Note :raising_hand:***
+>
+> Before continuing, make sure you accept the terms of service for the `diffusers` model [link to do so here](https://huggingface.co/CompVis/stable-diffusion-v1-4).
+>
+> Next, inside your terminal run the `huggingface-cli login` command and paste a token generated from [here](https://huggingface.co/settings/tokens). If you don't want to repeat this step in the future you can then run `git config --global credential.helper store`. *(note: only do this on a computer you trust)*
+
+  
 - **Step 3**: Run the server by typing `python server.py`
   - If you did everything correctly you should see an adress spit out after some time (eg. 127.0.0.1:8888)
 - **Step 4**: Open Krita, if you haven't already, and paste your address into the `endpoint` field of the plugin
