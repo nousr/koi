@@ -13,7 +13,10 @@ secho("Loading Model...", fg="yellow")
 
 # FIXME: more elegant model scope
 pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-    "CompVis/stable-diffusion-v1-4", use_auth_token=True
+    "CompVis/stable-diffusion-v1-4", use_auth_token=True,
+    # TODO: detect if there's 8G VRAM before we enable this model
+    revision="fp16",
+    torch_dtype=torch.float16,
 ).to("cuda")
 
 secho("Finished!", fg="green")
