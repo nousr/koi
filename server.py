@@ -54,11 +54,11 @@ def img2img():
         )["sample"][0]
 
     return_bytes = BytesIO()
-    return_image.save(return_bytes, format="JPEG")
+    return_image.save(return_bytes, format="PNG")
     return_bytes.read()
     return_bytes.seek(0)
 
-    return send_file(return_bytes, mimetype="image/jpeg")
+    return send_file(return_bytes, mimetype="image/png")
 
 
 app.run(host="0.0.0.0", port=8888)
