@@ -17,6 +17,11 @@ This plug-in serves as a working example of how new A.I. models like Stable Diff
 
 Because this is an open source project I encourage you to try it out, break things, and come back with suggestions!
 
+## Links
+
+[Twitter Thread](https://twitter.com/nousr_/status/1564797121412210688)
+[Discord Server](https://discord.gg/hDBbsXDd6K)
+
 ## Getting Started 🏁
 
 The easiest way to get started is to follow the plug-in installation process for krita. Then use the google colab backend server *(button at the top of this readme)*! This should give you a good introduction to the setup process and get you up and running fast!
