@@ -1,6 +1,6 @@
 # koi 🎣
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nousr/koi/blob/main/koi_colab_backend.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nousr/koi/blob/main/koi_colab_backend.ipynb) <a href="https://discord.gg/hDBbsXDd6K"><img alt="Join us on Discord" src="https://img.shields.io/discord/823813159592001537?color=5865F2&logo=discord&logoColor=white"></a>
 
 koi is an open source plug-in that allows you to use AI to accelerate your art workflow!
 
@@ -13,14 +13,11 @@ koi is an open source plug-in that allows you to use AI to accelerate your art w
 
 > The goal of this repository is to serve as a starting point for building increasingly useful tools for artists of all levels of experience to use. 
 
+[Link to original twitter thread](https://twitter.com/nousr_/status/1564797121412210688)
+
 This plug-in serves as a working example of how new A.I. models like Stable Diffusion can lower the barrier of entry to art so that anyone can enjoy making their dreams a reality!
 
 Because this is an open source project I encourage you to try it out, break things, and come back with suggestions!
-
-## Links
-
-[Twitter Thread](https://twitter.com/nousr_/status/1564797121412210688)
-[Discord Server](https://discord.gg/hDBbsXDd6K)
 
 ## Getting Started 🏁
 
