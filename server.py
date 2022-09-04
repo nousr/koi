@@ -48,7 +48,7 @@ def img2img():
         return_image = pipe(
             init_image=img,
             prompt=headers["prompt"],
-            strength=float(headers["image_strength"]),
+            strength=float(headers["sketch_strength"]),
             guidance_scale=float(headers["prompt_strength"]),
             num_inference_steps=int(headers["steps"]),
         )["sample"][0]
