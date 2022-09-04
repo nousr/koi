@@ -21,7 +21,7 @@ Because this is an open source project I encourage you to try it out, break thin
 
 ## Getting Started 🏁
 
-If you are new to git, or get stuck during the installation process, @Lewington-pitsos made a nice [step-by-step video](https://www.youtube.com/watch?v=rIhQakm4Efk).
+If you are new to git, or get stuck during the installation process, [Lewington](https://github.com/Lewington-pitsos) made a nice [step-by-step video](https://www.youtube.com/watch?v=rIhQakm4Efk).
 
 The easiest way to get started is to follow the plug-in installation process for krita. Then use the google colab backend server *(button at the top of this readme)*! This should give you a good introduction to the setup process and get you up and running fast!
 
