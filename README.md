@@ -21,6 +21,8 @@ Because this is an open source project I encourage you to try it out, break thin
 
 ## Getting Started 🏁
 
+If you are new to git, or get stuck during the installation process, @Lewington-pitsos made a nice [step-by-step video](https://www.youtube.com/watch?v=rIhQakm4Efk).
+
 The easiest way to get started is to follow the plug-in installation process for krita. Then use the google colab backend server *(button at the top of this readme)*! This should give you a good introduction to the setup process and get you up and running fast!
 
 --- 
@@ -30,7 +32,7 @@ The easiest way to get started is to follow the plug-in installation process for
 ### Krita has a few plug-in installation methods, however, I will refer you to the one I use.
 
 - **Step 1**: Find your operating system's `pykrita` folder [reference](https://docs.krita.org/en/reference_manual/resource_management.html#resource-management)
-- **Step 2**: Copy the `koi` folder, as well as `koi.desktop` to `pykrita`.
+- **Step 2**: Clone the repository, and copy the `koi` folder and `koi.desktop` to `pykrita`. (restart krita now if it is open)
 - **Step 3**: Open Krita and navigate to the python plug-in menu [reference](https://scripting.krita.org/lessons/plugins-introduction)
 - **Step 4**: Enable the `koi` plugin and restart Krita to load the plug-in.
 
