@@ -78,16 +78,18 @@ This part is easy!
   - *Krita Open(source) Img2Img: While support for StableDiffusion is first, the goal is to have this plug-in be compatible with any model!*
 - ***Why the client/server setup?***
   - *The goal is to make this as widely available as possible. The server can be run anywhere with a GPU (i.e. colab) and allow those with low-powered hardware to still use the plug-in!*
+- **I'm getting an error with "set-size"**
+  - This usually happens when you either forget "/api/img2img" at the end of your endpoint when copying it into the plugin OR you have some issue with your backend server (check the output on your server for more information).
 ---
 
 # TODO:
 - [x] Add colab backend example
-- [ ] Refactor code
-- [ ] Add DreamStudio API support
+- [ ] Flesh out UI
+- [ ] Move to CompVis repo
 - [ ] Add CI
+- [ ] Abstract away drop-in models for the server
 - [ ] Improve documentation
+- [ ] Add DreamStudio API support
 - [ ] Add support for arbitrary canvas size & selection-based img2img
 - [ ] Add support for masks
-- [ ] Improve UI/UX
 - [ ] Offer more configuration options
-- [ ] Abstract away drop-in models for the server
