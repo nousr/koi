@@ -1,6 +1,6 @@
 # koi 🎣
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nousr/koi/blob/main/koi_colab_backend.ipynb) <a href="https://discord.gg/hDBbsXDd6K"><img alt="Join us on Discord" src="https://img.shields.io/discord/823813159592001537?color=5865F2&logo=discord&logoColor=white"></a> [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com/nousr/koi)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nousr/koi/blob/main/koi_colab_backend.ipynb) <a href="https://discord.gg/hDBbsXDd6K"><img alt="Join us on Discord" src="https://img.shields.io/discord/1015817150608453732?color=5865F2&logo=discord&logoColor=white"></a> [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com/nousr/koi)
 
 koi is an open source plug-in for [Krita](https://krita.org/) that allows you to use AI to accelerate your art workflow!
 
