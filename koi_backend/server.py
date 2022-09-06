@@ -28,6 +28,7 @@ def header_to_sample_args(headers):
         "Precision": str,
         "Random-Seed": int,
         "Prompt": str,
+        "Sampler": str
     }
 
     args = {}
