@@ -128,7 +128,8 @@ def img2img():
     image = data_to_pil(data)
 
     # hijack headers as the sample_args and inject image
-    sample_args = {**header_to_sample_args(headers), "init_image": image}
+    sample_args = header_to_sample_args(headers)
+    sample_args.update({"init_image": image})
 
     print(sample_args)
 
