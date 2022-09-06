@@ -13,6 +13,17 @@ from einops import rearrange, repeat
 from PIL import Image
 from torch import autocast
 
+class CFGDenoiser(torch.nn.Module):
+    def __init__(self, model):
+        super().__init__()
+        self.inner_model = model
+
+    def forward(self, x, sigma, uncond, cond, cond_scale):
+        x_in = torch.cat([x] * 2)
+        sigma_in = torch.cat([sigma] * 2)
+        cond_in = torch.cat([uncond, cond])
+        uncond, cond = self.inner_model(x_in, sigma_in, cond=cond_in).chunk(2)
+        return uncond + (cond - uncond) * cond_scale
 
 def exists(x):
     return x is not None
@@ -121,7 +132,7 @@ def img2img(model, sample_args):
             noise = torch.randn_like(x0) * sigmas[sample_args["Sample-Steps"] - t_enc - 1]
             xi = x0 + noise
             sigma_sched = sigmas[sample_args["Sample-Steps"] - t_enc - 1 :]
-            model_wrap_cfg = k_samplers.CFGDenoiser(wrapped_model)
+            model_wrap_cfg = CFGDenoiser(wrapped_model)
             extra_args = {"cond": c, "uncond": uc, "Cond-Scale": sample_args["Cond-Scale"]}
 
             # sample
