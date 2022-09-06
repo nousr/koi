@@ -1,4 +1,5 @@
 import os
+from click import secho
 from omegaconf import OmegaConf
 from koi_backend.backends.stable_diffusion.utils import load_model_from_config
 
@@ -8,6 +9,17 @@ DEFAULT_CHECKPOINT_LOCATION = os.path.join(PACKAGE_DIR, "models", "sd-v1-4.ckpt"
 
 
 def load(config_path=DEFAULT_CONFIG_LOCATION, checkpoint_path=DEFAULT_CHECKPOINT_LOCATION):
+
+    # verify that the files exist
+    if not os.path.exists(DEFAULT_CHECKPOINT_LOCATION):
+        secho("CHECKPOINT MISSING!", fg="red")
+        secho(
+            f"Hint: ensure your stable diffusion checkpoint is placed in {DEFAULT_CHECKPOINT_LOCATION} and named 'sd-v1-4.ckpt'",
+            fg="red",
+        )
+
+        exit(1)
+
     config = OmegaConf.load(config_path)
     model = load_model_from_config(config=config, ckpt=checkpoint_path)
 

@@ -85,7 +85,7 @@ def change_model():
     model = getattr(harness, model_name)()
 
 
-@app.route("/api/img2img", method=["POST"])
+@app.route("/api/img2img", methods=["POST"])
 def img2img():
     """
     Turn one sketch into different variations given a prompt.
@@ -119,7 +119,7 @@ def img2img():
     return send_file(file=image_bytes, mimetype="image/png")
 
 
-@app.route("/api/txt2img", method=["POST"])
+@app.route("/api/txt2img", methods=["POST"])
 def txt2img():
     """
     Turn a prompt into an image.
@@ -127,7 +127,7 @@ def txt2img():
     raise NotImplementedError
 
 
-@app.route("/api/inpaint", method=["POST"])
+@app.route("/api/inpaint", methods=["POST"])
 def inpaint():
     """
     Modify an existing image.
@@ -136,8 +136,10 @@ def inpaint():
 
 
 @click.command()
-@click.option("--use_ngrok", default="false")
-def main(use_ngrok):
+@click.option("--host", default="127.0.0.1")
+@click.option("--port", default=8888)
+@click.option("--use_ngrok", default=False)
+def main(host, port, use_ngrok):
     """
     Initialize the server and enter a forever-loop to listen for requests.
     """
@@ -145,7 +147,7 @@ def main(use_ngrok):
     if use_ngrok:
         run_with_ngrok(app)
 
-    app.run()
+    app.run(host=host, port=port)
 
 
 if __name__ == "__main__":

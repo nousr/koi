@@ -30,7 +30,7 @@ def load_model_from_config(config, ckpt, verbose=False):
 
     pl_sd = load(ckpt, map_location="cpu")
 
-    if "global_step" in pl_sd:
+    if verbose and "global_step" in pl_sd:
         print(f"Global Step: {pl_sd['global_step']}")
 
     sd = pl_sd["state_dict"]

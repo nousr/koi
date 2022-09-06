@@ -132,3 +132,8 @@ dmypy.json
 .vscode
 .DS_Store
 build.sh
+
+# models
+*.pth
+*.ckpt
+*.pt
