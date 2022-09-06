@@ -1,7 +1,11 @@
 import os
+import sys
+
 from click import secho
-from omegaconf import OmegaConf
 from koi_backend.backends.stable_diffusion.utils import load_model_from_config
+from omegaconf import OmegaConf
+
+sys.path.append(os.getcwd())
 
 PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_CONFIG_LOCATION = os.path.join(PACKAGE_DIR, "configs", "v1-inference.yaml")
