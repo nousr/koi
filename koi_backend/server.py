@@ -173,6 +173,7 @@ def main(host, port, use_ngrok, sd_checkpoint_path, sd_config_path):
 
     if use_ngrok:
         run_with_ngrok(app)
+        app.run(port=port)
 
     app.run(host=host, port=port)
 
