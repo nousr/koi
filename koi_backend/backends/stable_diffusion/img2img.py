@@ -77,14 +77,6 @@ def img2img(model, sample_args):
     toc = time.time()
     print(f"prepared model in {toc-tic} seconds")
 
-    print("preparing init image")
-    tic = time.time()
-    # prepare the init image
-    init_image = preprocess_image(sample_args["Init-Image"])
-    x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["Batch-Size"]), model=model)
-    toc = time.time()
-    print(f"prepared init image in {toc-tic} seconds")
-
     print("getting sampler")
     tic = time.tim()
     # get the sampler
@@ -109,6 +101,14 @@ def img2img(model, sample_args):
 
     with precision_scope("cuda"):
         with model.ema_scope():
+
+            # prepare the init image
+            print("preparing init image")
+            tic = time.time()
+            init_image = preprocess_image(sample_args["Init-Image"])
+            x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["Batch-Size"]), model=model)
+            toc = time.time()
+            print(f"prepared init image in {toc-tic} seconds")
 
             # get learned conditioning
             uc = None
