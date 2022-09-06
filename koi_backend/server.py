@@ -161,13 +161,14 @@ def inpaint():
 @click.option("--host", default="127.0.0.1")
 @click.option("--port", default=8888)
 @click.option("--use-ngrok", default=False)
-@click.option("--sd-checkpoint-path", default="sd-v1-4.ckpt")
-def main(host, port, use_ngrok):
+@click.option("--sd-checkpoint-path", default=None)
+@click.option("--sd-config-path", default=None)
+def main(host, port, use_ngrok, sd_checkpoint_path, sd_config_path):
     """
     Initialize the server and enter a forever-loop to listen for requests.
     """
     click.secho(f"Loading Default Model...", fg="yellow")
-    model = harness.StableDiffusionHarness()
+    model = harness.StableDiffusionHarness(checkpoint_path=sd_checkpoint_path, config_path=sd_config_path)
     click.secho("Done!", fg="green")
 
     if use_ngrok:

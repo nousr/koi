@@ -11,10 +11,10 @@ DEFAULT_CHECKPOINT_LOCATION = os.path.join(PACKAGE_DIR, "models", "sd-v1-4.ckpt"
 def load(config_path=None, checkpoint_path=None):
 
     if config_path is None:
-        config_path=DEFAULT_CONFIG_LOCATION
+        config_path = DEFAULT_CONFIG_LOCATION
 
     if checkpoint_path is None:
-        checkpoint_path=DEFAULT_CHECKPOINT_LOCATION
+        checkpoint_path = DEFAULT_CHECKPOINT_LOCATION
 
     # verify that the files exist
     if not os.path.exists(DEFAULT_CHECKPOINT_LOCATION):
