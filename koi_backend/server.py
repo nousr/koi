@@ -142,7 +142,7 @@ def img2img():
 
     image_bytes = pil_to_data(image=return_image)
 
-    return send_file(file=image_bytes, mimetype="image/png")
+    return send_file(image_bytes, mimetype="image/png")
 
 
 @app.route("/api/txt2img", methods=["POST"])
