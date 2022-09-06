@@ -133,7 +133,7 @@ def img2img(model, sample_args):
             xi = x0 + noise
             sigma_sched = sigmas[sample_args["Sample-Steps"] - t_enc - 1 :]
             model_wrap_cfg = CFGDenoiser(wrapped_model)
-            extra_args = {"cond": c, "uncond": uc, "Cond-Scale": sample_args["Cond-Scale"]}
+            extra_args = {"cond": c, "uncond": uc, "cond_scale": sample_args["Cond-Scale"]}
 
             # sample
             samples_ddim = sampler(model_wrap_cfg, xi, sigma_sched, extra_args=extra_args)
