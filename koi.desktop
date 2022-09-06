@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Service
-ServiceTypes=Krita/PythonPlugin
-X-KDE-Library=koi
-X-Python-2-Compatible=false
-X-Krita-Manual=MANUAL.html
-Name=koi
-Comment=Empower your workflow with AI.
