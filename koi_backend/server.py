@@ -167,6 +167,9 @@ def main(host, port, use_ngrok, sd_checkpoint_path, sd_config_path):
     """
     Initialize the server and enter a forever-loop to listen for requests.
     """
+
+    global model
+    
     click.secho(f"Loading Default Model...", fg="yellow")
     model = harness.StableDiffusionHarness(checkpoint_path=sd_checkpoint_path, config_path=sd_config_path)
     click.secho("Done!", fg="green")
