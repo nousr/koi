@@ -1,0 +1,1968 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+
+  <style type='text/css'>
+    html {
+      overflow-x: initial !important;
+    }
+
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333333;
+      --select-text-bg-color: #B5D6FC;
+      --select-text-font-color: auto;
+      --monospace: "Lucida Console", Consolas, "Courier", monospace;
+      --title-bar-height: 20px;
+    }
+
+    .mac-os-11 {
+      --title-bar-height: 28px;
+    }
+
+    html {
+      font-size: 14px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0px;
+      padding: 0px;
+      height: auto;
+      inset: 0px;
+      font-size: 1rem;
+      line-height: 1.42857;
+      overflow-x: hidden;
+      background: inherit;
+      tab-size: 4;
+    }
+
+    iframe {
+      margin: auto;
+    }
+
+    a.url {
+      word-break: break-all;
+    }
+
+    a:active,
+    a:hover {
+      outline: 0px;
+    }
+
+    .in-text-selection,
+    ::selection {
+      text-shadow: none;
+      background: var(--select-text-bg-color);
+      color: var(--select-text-font-color);
+    }
+
+    #write {
+      margin: 0px auto;
+      height: auto;
+      width: inherit;
+      word-break: normal;
+      overflow-wrap: break-word;
+      position: relative;
+      white-space: normal;
+      overflow-x: visible;
+      padding-top: 36px;
+    }
+
+    #write.first-line-indent p {
+      text-indent: 2em;
+    }
+
+    #write.first-line-indent li p,
+    #write.first-line-indent p * {
+      text-indent: 0px;
+    }
+
+    #write.first-line-indent li {
+      margin-left: 2em;
+    }
+
+    .for-image #write {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    body.typora-export {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+
+    .typora-export .footnote-line,
+    .typora-export li,
+    .typora-export p {
+      white-space: pre-wrap;
+    }
+
+    .typora-export .task-list-item input {
+      pointer-events: none;
+    }
+
+    @media screen and (max-width: 500px) {
+      body.typora-export {
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+
+      #write {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .CodeMirror-sizer {
+        margin-left: 0px !important;
+      }
+
+      .CodeMirror-gutters {
+        display: none !important;
+      }
+    }
+
+    #write li>figure:last-child {
+      margin-bottom: 0.5rem;
+    }
+
+    #write ol,
+    #write ul {
+      position: relative;
+    }
+
+    img {
+      max-width: 100%;
+      vertical-align: middle;
+      image-orientation: from-image;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      color: inherit;
+      font: inherit;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      line-height: normal;
+      padding: 0px;
+    }
+
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+    }
+
+    #write h1,
+    #write h2,
+    #write h3,
+    #write h4,
+    #write h5,
+    #write h6,
+    #write p,
+    #write pre {
+      width: inherit;
+    }
+
+    #write h1,
+    #write h2,
+    #write h3,
+    #write h4,
+    #write h5,
+    #write h6,
+    #write p {
+      position: relative;
+    }
+
+    p {
+      line-height: inherit;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      break-after: avoid-page;
+      break-inside: avoid;
+      orphans: 4;
+    }
+
+    p {
+      orphans: 4;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+    }
+
+    h4 {
+      font-size: 1.4rem;
+    }
+
+    h5 {
+      font-size: 1.2rem;
+    }
+
+    h6 {
+      font-size: 1rem;
+    }
+
+    .md-math-block,
+    .md-rawblock,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .md-blockmeta {
+      color: rgb(204, 204, 204);
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    a {
+      cursor: pointer;
+    }
+
+    sup.md-footnote {
+      padding: 2px 4px;
+      background-color: rgba(238, 238, 238, 0.7);
+      color: rgb(85, 85, 85);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    sup.md-footnote a,
+    sup.md-footnote a:hover {
+      color: inherit;
+      text-transform: inherit;
+      text-decoration: inherit;
+    }
+
+    #write input[type="checkbox"] {
+      cursor: pointer;
+      width: inherit;
+      height: inherit;
+    }
+
+    figure {
+      overflow-x: auto;
+      margin: 1.2em 0px;
+      max-width: calc(100% + 16px);
+      padding: 0px;
+    }
+
+    figure>table {
+      margin: 0px;
+    }
+
+    tr {
+      break-inside: avoid;
+      break-after: auto;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0px;
+      width: 100%;
+      overflow: auto;
+      break-inside: auto;
+      text-align: left;
+    }
+
+    table.md-table td {
+      min-width: 32px;
+    }
+
+    .CodeMirror-gutters {
+      border-right: 0px;
+      background-color: inherit;
+    }
+
+    .CodeMirror-linenumber {
+      user-select: none;
+    }
+
+    .CodeMirror {
+      text-align: left;
+    }
+
+    .CodeMirror-placeholder {
+      opacity: 0.3;
+    }
+
+    .CodeMirror pre {
+      padding: 0px 4px;
+    }
+
+    .CodeMirror-lines {
+      padding: 0px;
+    }
+
+    div.hr:focus {
+      cursor: none;
+    }
+
+    #write pre {
+      white-space: pre-wrap;
+    }
+
+    #write.fences-no-line-wrapping pre {
+      white-space: pre;
+    }
+
+    #write pre.ty-contain-cm {
+      white-space: normal;
+    }
+
+    .CodeMirror-gutters {
+      margin-right: 4px;
+    }
+
+    .md-fences {
+      font-size: 0.9rem;
+      display: block;
+      break-inside: avoid;
+      text-align: left;
+      overflow: visible;
+      white-space: pre;
+      background: inherit;
+      position: relative !important;
+    }
+
+    .md-fences-adv-panel {
+      width: 100%;
+      margin-top: 10px;
+      text-align: center;
+      padding-top: 0px;
+      padding-bottom: 8px;
+      overflow-x: auto;
+    }
+
+    #write .md-fences.mock-cm {
+      white-space: pre-wrap;
+    }
+
+    .md-fences.md-fences-with-lineno {
+      padding-left: 0px;
+    }
+
+    #write.fences-no-line-wrapping .md-fences.mock-cm {
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .md-fences.mock-cm.md-fences-with-lineno {
+      padding-left: 8px;
+    }
+
+    .CodeMirror-line,
+    twitterwidget {
+      break-inside: avoid;
+    }
+
+    .footnotes {
+      opacity: 0.8;
+      font-size: 0.9rem;
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+
+    .footnotes+.footnotes {
+      margin-top: 0px;
+    }
+
+    .md-reset {
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      outline: 0px;
+      vertical-align: top;
+      background: 0px 0px;
+      text-decoration: none;
+      text-shadow: none;
+      float: none;
+      position: static;
+      width: auto;
+      height: auto;
+      white-space: nowrap;
+      cursor: inherit;
+      -webkit-tap-highlight-color: transparent;
+      line-height: normal;
+      font-weight: 400;
+      text-align: left;
+      box-sizing: content-box;
+      direction: ltr;
+    }
+
+    li div {
+      padding-top: 0px;
+    }
+
+    blockquote {
+      margin: 1rem 0px;
+    }
+
+    li .mathjax-block,
+    li p {
+      margin: 0.5rem 0px;
+    }
+
+    li blockquote {
+      margin: 1rem 0px;
+    }
+
+    li {
+      margin: 0px;
+      position: relative;
+    }
+
+    blockquote> :last-child {
+      margin-bottom: 0px;
+    }
+
+    blockquote> :first-child,
+    li> :first-child {
+      margin-top: 0px;
+    }
+
+    .footnotes-area {
+      color: rgb(136, 136, 136);
+      margin-top: 0.714rem;
+      padding-bottom: 0.143rem;
+      white-space: normal;
+    }
+
+    #write .footnote-line {
+      white-space: pre-wrap;
+    }
+
+    @media print {
+
+      body,
+      html {
+        border: 1px solid transparent;
+        height: 99%;
+        break-after: avoid;
+        break-before: avoid;
+        font-variant-ligatures: no-common-ligatures;
+      }
+
+      #write {
+        margin-top: 0px;
+        padding-top: 0px;
+        border-color: transparent !important;
+      }
+
+      .typora-export * {
+        -webkit-print-color-adjust: exact;
+      }
+
+      .typora-export #write {
+        break-after: avoid;
+      }
+
+      .typora-export #write::after {
+        height: 0px;
+      }
+
+      .is-mac table {
+        break-inside: avoid;
+      }
+
+      .typora-export-show-outline .typora-export-sidebar {
+        display: none;
+      }
+    }
+
+    .footnote-line {
+      margin-top: 0.714em;
+      font-size: 0.7em;
+    }
+
+    a img,
+    img a {
+      cursor: pointer;
+    }
+
+    pre.md-meta-block {
+      font-size: 0.8rem;
+      min-height: 0.8rem;
+      white-space: pre-wrap;
+      background: rgb(204, 204, 204);
+      display: block;
+      overflow-x: hidden;
+    }
+
+    p>.md-image:only-child:not(.md-img-error) img,
+    p>img:only-child {
+      display: block;
+      margin: auto;
+    }
+
+    #write.first-line-indent p>.md-image:only-child:not(.md-img-error) img {
+      left: -2em;
+      position: relative;
+    }
+
+    p>.md-image:only-child {
+      display: inline-block;
+      width: 100%;
+    }
+
+    #write .MathJax_Display {
+      margin: 0.8em 0px 0px;
+    }
+
+    .md-math-block {
+      width: 100%;
+    }
+
+    .md-math-block:not(:empty)::after {
+      display: none;
+    }
+
+    .MathJax_ref {
+      fill: currentcolor;
+    }
+
+    [contenteditable="true"]:active,
+    [contenteditable="true"]:focus,
+    [contenteditable="false"]:active,
+    [contenteditable="false"]:focus {
+      outline: 0px;
+      box-shadow: none;
+    }
+
+    .md-task-list-item {
+      position: relative;
+      list-style-type: none;
+    }
+
+    .task-list-item.md-task-list-item {
+      padding-left: 0px;
+    }
+
+    .md-task-list-item>input {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      margin-left: -1.2em;
+      margin-top: calc(1em - 10px);
+      border: none;
+    }
+
+    .math {
+      font-size: 1rem;
+    }
+
+    .md-toc {
+      min-height: 3.58rem;
+      position: relative;
+      font-size: 0.9rem;
+      border-radius: 10px;
+    }
+
+    .md-toc-content {
+      position: relative;
+      margin-left: 0px;
+    }
+
+    .md-toc-content::after,
+    .md-toc::after {
+      display: none;
+    }
+
+    .md-toc-item {
+      display: block;
+      color: rgb(65, 131, 196);
+    }
+
+    .md-toc-item a {
+      text-decoration: none;
+    }
+
+    .md-toc-inner:hover {
+      text-decoration: underline;
+    }
+
+    .md-toc-inner {
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .md-toc-h1 .md-toc-inner {
+      margin-left: 0px;
+      font-weight: 700;
+    }
+
+    .md-toc-h2 .md-toc-inner {
+      margin-left: 2em;
+    }
+
+    .md-toc-h3 .md-toc-inner {
+      margin-left: 4em;
+    }
+
+    .md-toc-h4 .md-toc-inner {
+      margin-left: 6em;
+    }
+
+    .md-toc-h5 .md-toc-inner {
+      margin-left: 8em;
+    }
+
+    .md-toc-h6 .md-toc-inner {
+      margin-left: 10em;
+    }
+
+    @media screen and (max-width: 48em) {
+      .md-toc-h3 .md-toc-inner {
+        margin-left: 3.5em;
+      }
+
+      .md-toc-h4 .md-toc-inner {
+        margin-left: 5em;
+      }
+
+      .md-toc-h5 .md-toc-inner {
+        margin-left: 6.5em;
+      }
+
+      .md-toc-h6 .md-toc-inner {
+        margin-left: 8em;
+      }
+    }
+
+    a.md-toc-inner {
+      font-size: inherit;
+      font-style: inherit;
+      font-weight: inherit;
+      line-height: inherit;
+    }
+
+    .footnote-line a:not(.reversefootnote) {
+      color: inherit;
+    }
+
+    .md-attr {
+      display: none;
+    }
+
+    .md-fn-count::after {
+      content: ".";
+    }
+
+    code,
+    pre,
+    samp,
+    tt {
+      font-family: var(--monospace);
+    }
+
+    kbd {
+      margin: 0px 0.1em;
+      padding: 0.1em 0.6em;
+      font-size: 0.8em;
+      color: rgb(36, 39, 41);
+      background: rgb(255, 255, 255);
+      border: 1px solid rgb(173, 179, 185);
+      border-radius: 3px;
+      box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .md-comment {
+      color: rgb(162, 127, 3);
+      opacity: 0.6;
+      font-family: var(--monospace);
+    }
+
+    code {
+      text-align: left;
+      vertical-align: initial;
+    }
+
+    a.md-print-anchor {
+      white-space: pre !important;
+      border-width: initial !important;
+      border-style: none !important;
+      border-color: initial !important;
+      display: inline-block !important;
+      position: absolute !important;
+      width: 1px !important;
+      right: 0px !important;
+      outline: 0px !important;
+      background: 0px 0px !important;
+      text-decoration: initial !important;
+      text-shadow: initial !important;
+    }
+
+    .os-windows.monocolor-emoji .md-emoji {
+      font-family: "Segoe UI Symbol", sans-serif;
+    }
+
+    .md-diagram-panel>svg {
+      max-width: 100%;
+    }
+
+    [lang="flow"] svg,
+    [lang="mermaid"] svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    [lang="mermaid"] .node text {
+      font-size: 1rem;
+    }
+
+    table tr th {
+      border-bottom: 0px;
+    }
+
+    video {
+      max-width: 100%;
+      display: block;
+      margin: 0px auto;
+    }
+
+    iframe {
+      max-width: 100%;
+      width: 100%;
+      border: none;
+    }
+
+    .highlight td,
+    .highlight tr {
+      border: 0px;
+    }
+
+    mark {
+      background: rgb(255, 255, 0);
+      color: rgb(0, 0, 0);
+    }
+
+    .md-html-inline .md-plain,
+    .md-html-inline strong,
+    mark .md-inline-math,
+    mark strong {
+      color: inherit;
+    }
+
+    .md-expand mark .md-meta {
+      opacity: 0.3 !important;
+    }
+
+    mark .md-meta {
+      color: rgb(0, 0, 0);
+    }
+
+    @media print {
+
+      .typora-export h1,
+      .typora-export h2,
+      .typora-export h3,
+      .typora-export h4,
+      .typora-export h5,
+      .typora-export h6 {
+        break-inside: avoid;
+      }
+    }
+
+    .md-diagram-panel .messageText {
+      stroke: none !important;
+    }
+
+    .md-diagram-panel .start-state {
+      fill: var(--node-fill);
+    }
+
+    .md-diagram-panel .edgeLabel rect {
+      opacity: 1 !important;
+    }
+
+    .md-fences.md-fences-math {
+      font-size: 1em;
+    }
+
+    .md-fences-advanced:not(.md-focus) {
+      padding: 0px;
+      white-space: nowrap;
+      border: 0px;
+    }
+
+    .md-fences-advanced:not(.md-focus) {
+      background: inherit;
+    }
+
+    .typora-export-show-outline .typora-export-content {
+      max-width: 1440px;
+      margin: auto;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .typora-export-sidebar {
+      width: 300px;
+      font-size: 0.8rem;
+      margin-top: 80px;
+      margin-right: 18px;
+    }
+
+    .typora-export-show-outline #write {
+      --webkit-flex: 2;
+      flex: 2 1 0%;
+    }
+
+    .typora-export-sidebar .outline-content {
+      position: fixed;
+      top: 0px;
+      max-height: 100%;
+      overflow: hidden auto;
+      padding-bottom: 30px;
+      padding-top: 60px;
+      width: 300px;
+    }
+
+    @media screen and (max-width: 1024px) {
+
+      .typora-export-sidebar,
+      .typora-export-sidebar .outline-content {
+        width: 240px;
+      }
+    }
+
+    @media screen and (max-width: 800px) {
+      .typora-export-sidebar {
+        display: none;
+      }
+    }
+
+    .outline-content li,
+    .outline-content ul {
+      margin-left: 0px;
+      margin-right: 0px;
+      padding-left: 0px;
+      padding-right: 0px;
+      list-style: none;
+    }
+
+    .outline-content ul {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    .outline-content strong {
+      font-weight: 400;
+    }
+
+    .outline-expander {
+      width: 1rem;
+      height: 1.42857rem;
+      position: relative;
+      display: table-cell;
+      vertical-align: middle;
+      cursor: pointer;
+      padding-left: 4px;
+    }
+
+    .outline-expander::before {
+      content: "";
+      position: relative;
+      font-family: Ionicons;
+      display: inline-block;
+      font-size: 8px;
+      vertical-align: middle;
+    }
+
+    .outline-item {
+      padding-top: 3px;
+      padding-bottom: 3px;
+      cursor: pointer;
+    }
+
+    .outline-expander:hover::before {
+      content: "";
+    }
+
+    .outline-h1>.outline-item {
+      padding-left: 0px;
+    }
+
+    .outline-h2>.outline-item {
+      padding-left: 1em;
+    }
+
+    .outline-h3>.outline-item {
+      padding-left: 2em;
+    }
+
+    .outline-h4>.outline-item {
+      padding-left: 3em;
+    }
+
+    .outline-h5>.outline-item {
+      padding-left: 4em;
+    }
+
+    .outline-h6>.outline-item {
+      padding-left: 5em;
+    }
+
+    .outline-label {
+      cursor: pointer;
+      display: table-cell;
+      vertical-align: middle;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .outline-label:hover {
+      text-decoration: underline;
+    }
+
+    .outline-item:hover {
+      border-color: rgb(245, 245, 245);
+      background-color: var(--item-hover-bg-color);
+    }
+
+    .outline-item:hover {
+      margin-left: -28px;
+      margin-right: -28px;
+      border-left: 28px solid transparent;
+      border-right: 28px solid transparent;
+    }
+
+    .outline-item-single .outline-expander::before,
+    .outline-item-single .outline-expander:hover::before {
+      display: none;
+    }
+
+    .outline-item-open>.outline-item>.outline-expander::before {
+      content: "";
+    }
+
+    .outline-children {
+      display: none;
+    }
+
+    .info-panel-tab-wrapper {
+      display: none;
+    }
+
+    .outline-item-open>.outline-children {
+      display: block;
+    }
+
+    .typora-export .outline-item {
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+
+    .typora-export .outline-item:hover {
+      margin-right: -8px;
+      border-right: 8px solid transparent;
+    }
+
+    .typora-export .outline-expander::before {
+      content: "+";
+      font-family: inherit;
+      top: -1px;
+    }
+
+    .typora-export .outline-expander:hover::before,
+    .typora-export .outline-item-open>.outline-item>.outline-expander::before {
+      content: "−";
+    }
+
+    .typora-export-collapse-outline .outline-children {
+      display: none;
+    }
+
+    .typora-export-collapse-outline .outline-item-open>.outline-children,
+    .typora-export-no-collapse-outline .outline-children {
+      display: block;
+    }
+
+    .typora-export-no-collapse-outline .outline-expander::before {
+      content: "" !important;
+    }
+
+    .typora-export-show-outline .outline-item-active>.outline-item .outline-label {
+      font-weight: 700;
+    }
+
+    .md-inline-math-container mjx-container {
+      zoom: 0.95;
+    }
+
+
+    :root {
+      --side-bar-bg-color: #d9ede5;
+      --control-text-color: #6B6B6B;
+      --active-file-bg-color: #ecf6f2;
+      --active-file-border-color: #6B6B6B;
+      --active-file-text-color: #202020;
+      --table-even-row-color: #f8fcfa;
+      --table-head-color: #d9ede5;
+      --deep-theme-color: #4eb289;
+      --code-block-bg-color: #0F111A;
+    }
+
+    /*serif*/
+    /*monospace*/
+    /*Chinese*/
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Lexend', 'Helvetica', 'SourceCodePro', 'NotoSansSC';
+      font-weight: normal;
+      line-height: 1.5rem;
+      letter-spacing: 0;
+      margin: 0;
+    }
+
+    #write {
+      max-width: 900px;
+      padding: 30px 50px 20px;
+    }
+
+    #write p {
+      text-align: left;
+    }
+
+    #write pre.md-meta-block {
+      padding: 1rem;
+      font-size: 85%;
+      line-height: 1.45;
+      background-color: #f7f7f7;
+      border: 0;
+      border-radius: 3px;
+      color: #777777;
+      margin-top: 0 !important;
+    }
+
+    .md-image>.md-meta {
+      color: #777777;
+      font-size: 0.9rem;
+      font-family: 'Lexend';
+      padding: 4px 0;
+    }
+
+
+    @media print {
+
+      html,
+      body {
+        font-size: 14px;
+      }
+
+      .md-fences {
+        line-height: 1.2rem;
+      }
+
+
+      table,
+      pre {
+        page-break-inside: avoid;
+      }
+
+      pre {
+        word-wrap: break-word;
+      }
+
+    }
+
+    @page {
+      size: A4;
+      margin: 8mm 0mm;
+    }
+
+    /*toc*/
+    .md-toc {
+      margin-top: 20px;
+      padding-bottom: 20px;
+      color: var(--deep-theme-color);
+    }
+
+    a {
+      color: var(--deep-theme-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /*headers*/
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      display: block;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      line-height: 110%;
+      margin-top: 0.67em;
+      margin-bottom: 0.67em;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-top: 0.83em;
+      margin-bottom: 0.83em;
+    }
+
+    h3 {
+      font-size: 1.17em;
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+
+    h4 {
+      font-size: 1em;
+      margin-top: 1.33em;
+      margin-bottom: 1.33em;
+    }
+
+    h5 {
+      font-size: 1em;
+      margin-top: 1.33em;
+      margin-bottom: 1.33em;
+      color: #777777;
+    }
+
+    h6 {
+      font-size: 1em;
+      margin-top: 1.33em;
+      margin-bottom: 1.33em;
+      color: #adadad;
+    }
+
+    p,
+    blockquote,
+    ul,
+    ol,
+    dl,
+    table {
+      margin: 0.5rem 0;
+    }
+
+    /*table*/
+    table {
+      border-collapse: collapse;
+      padding: 0;
+      word-break: initial;
+      width: 100%;
+    }
+
+    table tr:nth-child(even) {
+      background-color: var(--table-even-row-color);
+    }
+
+    thead {
+      background-color: var(--table-head-color);
+    }
+
+    table th {
+      text-align: center;
+      padding: 6px 13px;
+      border: 1px solid var(--table-head-color);
+    }
+
+    table td {
+      padding: 6px 13px;
+      border: 1px solid var(--table-head-color);
+    }
+
+    table tr {
+      padding: 6px 13px;
+      border: 1px solid var(--table-head-color);
+    }
+
+    /*blockquote*/
+    blockquote {
+      border-left: 0.2rem solid var(--side-bar-bg-color);
+      color: #777777;
+      font-family: 'Lexend', 'NotoSansSC';
+      font-size: 0.9rem;
+      padding-left: 2rem;
+    }
+
+
+    /*list*/
+
+    li p.first {
+      display: inline-block;
+    }
+
+    ul,
+    ol {
+      padding-left: 30px;
+    }
+
+    ul:first-child,
+    ol:first-child {
+      margin-top: 0;
+    }
+
+    ul:last-child,
+    ol:last-child {
+      margin-bottom: 0;
+    }
+
+    .md-task-list-item:hover>input:before,
+    input[type='checkbox']:hover:before {
+      opacity: 1;
+      transition: 0.5s;
+      background-color: var(--side-bar-bg-color);
+    }
+
+    .task-list-item input::before {
+      content: "";
+      display: inline-block;
+      border-radius: 1.1rem;
+      vertical-align: middle;
+      border: 1.2px solid var(--deep-theme-color);
+      background-color: #ffffff;
+      width: 1.1rem;
+      height: 1.1rem;
+      margin-left: -0.1rem;
+      margin-right: 0.1rem;
+      margin-top: -0.68rem;
+    }
+
+    .task-list-item input:checked::before {
+      padding-left: 0.125em;
+      content: '✔';
+      color: white;
+      background-color: var(--deep-theme-color);
+      font-size: 0.8rem;
+      line-height: 0.95rem;
+      margin-top: -0.68rem;
+      transition: background-color 200ms ease-in-out;
+    }
+
+    .task-list-done {
+      text-decoration: line-through;
+      color: #adadad;
+    }
+
+    hr {
+      border-style: none;
+      border-top-style: solid;
+      border-color: #e7e7e7;
+      border-width: 1px;
+      margin: 2rem 0;
+    }
+
+    /*highlight*/
+    #write mark {
+      background-color: #c7ffe8;
+      border-radius: 2px;
+      color: black;
+      padding: 0 4px;
+      margin: 0 2px;
+    }
+
+    /*inline code*/
+    #write code,
+    tt {
+      padding: 0.6px 4px;
+      border-radius: 2px;
+      background-color: #f1f1f1;
+      font-family: 'SourceCodePro', Consolas, Courier, 'NotoSansSC';
+      font-size: 0.9rem;
+      color: var(--code-block-bg-color);
+      margin: 0 2px;
+    }
+
+    /*footnote*/
+    #write .md-footnote {
+      color: #777777;
+      background-color: #f7f7f7;
+    }
+
+    /*source code mode*/
+    .cm-s-typora-default .cm-header {
+      color: var(--code-block-bg-color);
+    }
+
+    .cm-s-typora-default .cm-link {
+      color: var(--deep-theme-color);
+
+    }
+
+
+    /*code block*/
+    #write .md-fences {
+      font-size: 1rem;
+      margin: 0.2em 0;
+      padding: 0.5em;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: 'SourceCodePro', Consolas, Courier, 'NotoSansSC';
+      background-color: var(--code-block-bg-color);
+      color: #A9B7C6;
+      border: none;
+      text-shadow: none;
+    }
+
+    .md-fences .code-tooltip {
+      background-color: var(--code-block-bg-color);
+    }
+
+    /*
+  Name:       material-ocean
+  Author:     Mattia Astorino (http://github.com/equinusocio)
+  Website:    https://material-theme.site/
+*/
+
+    .cm-s-inner.CodeMirror {
+      background-color: #0F111A;
+      color: #8F93A2;
+    }
+
+    .cm-s-inner .CodeMirror-gutters {
+      background: #0F111A;
+      color: #464B5D;
+      border: none;
+    }
+
+    .cm-s-inner .CodeMirror-linenumber {
+      color: #464B5D;
+    }
+
+    .cm-s-inner .CodeMirror-guttermarker {
+      color: #FFEE80;
+    }
+
+    .cm-s-inner .CodeMirror-guttermarker-subtle {
+      color: #D0D0D0;
+    }
+
+    /*
+.cm-s-inner .CodeMirror-cursor {
+  border-left: 1px solid #FFCC00;
+}
+.cm-s-inner.cm-fat-cursor .CodeMirror-cursor {
+  background-color: #FFCC00 !important;
+}
+.cm-s-inner .cm-animate-fat-cursor {
+  background-color: #FFCC00 !important;
+}
+*/
+
+    .cm-s-inner .CodeMirror-cursor {
+      border-left: 1px solid #A9B7C6;
+    }
+
+    .cm-s-inner div.CodeMirror-cursor {
+      border-left: 1px solid #ffffff;
+    }
+
+    .cm-s-inner div.CodeMirror-selected {
+      background: rgba(113, 124, 180, 0.2);
+    }
+
+    .cm-s-inner.CodeMirror-focused div.CodeMirror-selected {
+      background: rgba(113, 124, 180, 0.2);
+    }
+
+    .cm-s-inner .CodeMirror-selected {
+      background: #214283 !important;
+    }
+
+    .cm-s-inner .CodeMirror-selectedtext {
+      background: #214283 !important;
+    }
+
+    .cm-overlay.CodeMirror-selectedtext {
+      background: #B5D6FC !important;
+    }
+
+    .cm-s-inner .CodeMirror-line::selection,
+    .cm-s-inner .CodeMirror-line>span::selection,
+    .cm-s-inner .CodeMirror-line>span>span::selection {
+      background: rgba(128, 203, 196, 0.2);
+    }
+
+    .cm-s-inner .CodeMirror-line::-moz-selection,
+    .cm-s-inner .CodeMirror-line>span::-moz-selection,
+    .cm-s-inner .CodeMirror-line>span>span::-moz-selection {
+      background: rgba(128, 203, 196, 0.2);
+    }
+
+    /* .cm-s-inner .CodeMirror-activeline-background {
+  background: rgba(0, 0, 0, 0.5);
+} */
+
+    .cm-s-inner .cm-keyword {
+      color: #C792EA;
+    }
+
+    .cm-s-inner .cm-operator {
+      color: #89DDFF;
+    }
+
+    .cm-s-inner .cm-variable-2 {
+      color: #EEFFFF;
+    }
+
+    .cm-s-inner .cm-variable-3,
+    .cm-s-inner .cm-type {
+      color: #f07178;
+    }
+
+    .cm-s-inner .cm-builtin {
+      color: #FFCB6B;
+    }
+
+    .cm-s-inner .cm-atom {
+      color: #F78C6C;
+    }
+
+    .cm-s-inner .cm-number {
+      color: #FF5370;
+    }
+
+    .cm-s-inner .cm-def {
+      color: #82AAFF;
+    }
+
+    .cm-s-inner .cm-string {
+      color: #C3E88D;
+    }
+
+    .cm-s-inner .cm-string-2 {
+      color: #f07178;
+    }
+
+    .cm-s-inner .cm-comment {
+      color: #585d6d;
+    }
+
+    .cm-s-inner .cm-variable {
+      color: #f07178;
+    }
+
+    .cm-s-inner .cm-tag {
+      color: #FF5370;
+    }
+
+    .cm-s-inner .cm-meta {
+      color: #FFCB6B;
+    }
+
+    .cm-s-inner .cm-attribute {
+      color: #C792EA;
+    }
+
+    .cm-s-inner .cm-property {
+      color: #C792EA;
+    }
+
+    .cm-s-inner .cm-qualifier {
+      color: #DECB6B;
+    }
+
+    .cm-s-inner .cm-variable-3,
+    .cm-s-inner .cm-type {
+      color: #DECB6B;
+    }
+
+
+    .cm-s-inner .cm-error {
+      color: rgba(255, 255, 255, 1.0);
+      background-color: #FF5370;
+    }
+
+    .cm-s-inner .CodeMirror-matchingbracket {
+      text-decoration: underline;
+      color: white !important;
+    }
+
+
+    @import "";
+
+    :root {
+
+      --bg-color: #272729;
+      --text-color: #cccccc;
+      --blur-text-color: #818286;
+      --side-bar-bg-color: #232325;
+      --control-text-color: #7a7b7e;
+      --active-file-bg-color: #19191b;
+      --active-file-border-color: #4eb289;
+      --active-file-text-color: #4eb289;
+      --table-head-color: #232325;
+      --mint-light-color: #d9ede5;
+      --deep-theme-color: #4eb289;
+      --code-block-bg-color: #0F111A;
+      --rawblock-edit-panel-bd: #232325;
+      --footer-box: #6a6b6e;
+      --select-text-bg-color: #7a88a3;
+      --item-hover-bg-color: #56575a;
+      --window-border: 1px solid #39393a;
+      --highlight-color: #4eb289;
+    }
+
+    /*scroll bar*/
+    ::-webkit-scrollbar-thumb {
+      border-radius: 8px;
+      background-color: var(--control-text-color);
+    }
+
+    #write pre.md-meta-block {
+      background-color: var(--item-hover-bg-color);
+      color: var(--text-color);
+    }
+
+    /*source code mode*/
+    .cm-s-typora-default .cm-header {
+      color: var(--mint-light-color);
+    }
+
+    .cm-s-typora-default .cm-link {
+      color: var(--deep-theme-color);
+    }
+
+    #toggle-sourceview-btn {
+      background: var(--bg-color) !important;
+    }
+
+    #toggle-sourceview-btn:hover {
+      background: #39393b;
+    }
+
+    /*table*/
+    table tr:nth-child(even) {
+      background-color: var(--bg-color);
+    }
+
+    thead {
+      background-color: var(--table-head-color);
+      color: var(--deep-theme-color);
+    }
+
+    table th {
+      border: 1px solid var(--mint-light-color);
+    }
+
+    table td {
+      border: 1px solid var(--mint-light-color);
+    }
+
+    table tr {
+      border: 1px solid var(--mint-light-color);
+    }
+
+
+    /* footer */
+    footer.ty-footer {
+      border: none;
+    }
+
+    .footer-item:hover {
+      background-color: var(--footer-box);
+    }
+
+    /*megamenu*/
+    .megamenu-menu {
+      box-shadow: none;
+      background-color: var(--side-bar-bg-color);
+    }
+
+    .megamenu-content,
+    .megamenu-opened header {
+      background: var(--bg-color);
+      background-image: none;
+    }
+
+    .megamenu-menu-panel table td:nth-child(1) {
+      background-color: var(--bg-color);
+    }
+
+    .megamenu-menu-panel table td:nth-child(2) {
+      background-color: var(--bg-color);
+    }
+
+    #recent-file-panel-action-btn {
+      background-color: var(--bg-color);
+    }
+
+    /* preferences */
+    .ty-preferences .window-header {
+      background-color: var(--active-file-bg-color);
+    }
+
+    .ty-preferences .nav-group-item:hover {
+      background-color: var(--item-hover-bg-color);
+    }
+
+    .btn:hover,
+    .button-hover,
+    .md-image-btn:hover {
+      background-color: #39393a !important;
+      color: var(--text-color);
+    }
+
+    .menu-style-btn:hover {
+      background-color: var(--item-hover-bg-color);
+      border: none;
+    }
+
+    /*blockquote*/
+    blockquote {
+      border-left: 0.2rem solid var(--deep-theme-color);
+      color: #919191;
+    }
+
+    /*checkbox*/
+    .md-task-list-item:hover>input:before,
+    input[type='checkbox']:hover:before {
+      background-color: #505052;
+    }
+
+    .task-list-item input::before {
+      border: 1.2px solid var(--deep-theme-color);
+      background-color: var(--bg-color);
+    }
+
+    .task-list-item input:checked::before {
+      color: var(--bg-color);
+      font-weight: 600;
+      background-color: var(--deep-theme-color);
+    }
+
+    .task-list-done {
+      color: #777777;
+    }
+
+    /*highlight*/
+    #write mark {
+      background-color: var(--highlight-color);
+      color: #fff;
+    }
+
+    /*inline code*/
+    #write code,
+    tt {
+      padding: 2px 4px;
+      border-radius: 2px;
+      background-color: var(--code-block-bg-color);
+      color: var(--text-color);
+      margin: 0 2px;
+    }
+
+    /*footnote*/
+    #write .md-footnote {
+      color: #777777;
+      background-color: var(--code-block-bg-color);
+    }
+  </style>
+  <title>README</title>
+</head>
+
+<body class='typora-export os-windows typora-export-show-outline typora-export-collapse-outline'>
+  <div class='typora-export-content'>
+    <div class="typora-export-sidebar">
+      <div class="outline-content">
+        <li class="outline-item-wrapper outline-h1">
+          <div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#koi-🎣">koi
+              🎣</a></div>
+          <ul class="outline-children">
+            <li class="outline-item-wrapper outline-h4 outline-item-single">
+              <div class="outline-item"><span class="outline-expander"></span><a class="outline-label"
+                  href="#disclaimer-✋">Disclaimer ✋</a></div>
+              <ul class="outline-children"></ul>
+            </li>
+            <li class="outline-item-wrapper outline-h2 outline-item-single">
+              <div class="outline-item"><span class="outline-expander"></span><a class="outline-label"
+                  href="#overview-😄">Overview 😄</a></div>
+              <ul class="outline-children"></ul>
+            </li>
+            <li class="outline-item-wrapper outline-h2 outline-item-single">
+              <div class="outline-item"><span class="outline-expander"></span><a class="outline-label"
+                  href="#getting-started-🏁">Getting Started 🏁</a></div>
+              <ul class="outline-children"></ul>
+            </li>
+            <li class="outline-item-wrapper outline-h2">
+              <div class="outline-item"><span class="outline-expander"></span><a class="outline-label"
+                  href="#installation-🔨">Installation 🔨</a></div>
+              <ul class="outline-children">
+                <li class="outline-item-wrapper outline-h3 outline-item-single">
+                  <div class="outline-item"><span class="outline-expander"></span><a class="outline-label"
+                      href="#krita-has-a-few-plug-in-installation-methods-however-i-will-refer-you-to-the-one-i-use">Krita
+                      has a few plug-in installation methods, however, I will refer you to the one I use.</a></div>
+                  <ul class="outline-children"></ul>
+                </li>
+                <li class="outline-item-wrapper outline-h3 outline-item-single">
+                  <div class="outline-item"><span class="outline-expander"></span><a class="outline-label"
+                      href="#the-next-thing-you-will-need-to-do-is-setup-the-backend-server-that-do-all-the-computation">The
+                      next thing you will need to do is setup the backend server that do all the computation!</a></div>
+                  <ul class="outline-children"></ul>
+                </li>
+              </ul>
+            </li>
+            <li class="outline-item-wrapper outline-h2 outline-item-single">
+              <div class="outline-item"><span class="outline-expander"></span><a class="outline-label"
+                  href="#inference-🖌️">Inference 🖌️</a></div>
+              <ul class="outline-children"></ul>
+            </li>
+            <li class="outline-item-wrapper outline-h2 outline-item-single">
+              <div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#faq-❔">FAQ
+                  ❔</a></div>
+              <ul class="outline-children"></ul>
+            </li>
+          </ul>
+        </li>
+        <li class="outline-item-wrapper outline-h1 outline-item-single">
+          <div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#todo">TODO</a>
+          </div>
+          <ul class="outline-children"></ul>
+        </li>
+      </div>
+    </div>
+    <div id='write' class=''>
+      <h1 id='koi-🎣'><span>koi 🎣</span></h1>
+      <p><a href='https://colab.research.google.com/github/nousr/koi/blob/main/koi_colab_backend.ipynb'><img
+            src="https://colab.research.google.com/assets/colab-badge.svg" referrerpolicy="no-referrer"
+            alt="Open In Colab"></a><span> </span><a href="https://discord.gg/hDBbsXDd6K"><img alt="Join us on Discord"
+            src="https://img.shields.io/discord/823813159592001537?color=5865F2&logo=discord&logoColor=white"></a><span>
+        </span><a href='https://github.com/nousr/koi'><img
+            src="https://badgen.net/badge/icon/github?icon=github&amp;label" referrerpolicy="no-referrer"
+            alt="GitHub"></a></p>
+      <p><span>koi is an open source plug-in for </span><a href='https://krita.org/'><span>Krita</span></a><span> that
+          allows you to use AI to accelerate your art workflow!</span></p>
+      <h4 id='disclaimer-✋'><span>Disclaimer ✋</span></h4>
+      <blockquote>
+        <p><span>In the interest of getting the open source community on board--I have released this plug-in early. In
+            its current state you may run into issues (particularly during the setup process). If you do, I encourage
+            you to open an issue here on GitHub and describe your problems so that it can be fixed it for you and
+            others!</span></p>
+      </blockquote>
+      <hr />
+      <h2 id='overview-😄'><span>Overview 😄</span></h2>
+      <blockquote>
+        <p><span>The goal of this repository is to serve as a starting point for building increasingly useful tools for
+            artists of all levels of experience to use. </span></p>
+      </blockquote>
+      <p><a href='https://twitter.com/nousr_/status/1564797121412210688'><span>Link to original twitter
+            thread</span></a></p>
+      <p><span>This plug-in serves as a working example of how new A.I. models like Stable Diffusion can lower the
+          barrier of entry to art so that anyone can enjoy making their dreams a reality!</span></p>
+      <p><span>Because this is an open source project I encourage you to try it out, break things, and come back with
+          suggestions!</span></p>
+      <h2 id='getting-started-🏁'><span>Getting Started 🏁</span></h2>
+      <p><span>If you are new to git, or get stuck during the installation process, </span><a
+          href='https://github.com/Lewington-pitsos'><span>Lewington</span></a><span> made a nice </span><a
+          href='https://www.youtube.com/watch?v=rIhQakm4Efk'><span>step-by-step video</span></a><span>.</span></p>
+      <p><span>The easiest way to get started is to follow the plug-in installation process for krita. Then use the
+          google colab backend server </span><em><span>(button at the top of this readme)</span></em><span>! This should
+          give you a good introduction to the setup process and get you up and running fast!</span></p>
+      <hr />
+      <h2 id='installation-🔨'><span>Installation 🔨</span></h2>
+      <h3 id='krita-has-a-few-plug-in-installation-methods-however-i-will-refer-you-to-the-one-i-use'><span>Krita has a
+          few plug-in installation methods, however, I will refer you to the one I use.</span></h3>
+      <ul>
+        <li><strong><span>Step 1</span></strong><span>: Find your operating system&#39;s
+          </span><code>pykrita</code><span> folder </span><a
+            href='https://docs.krita.org/en/reference_manual/resource_management.html#resource-management'><span>reference</span></a>
+        </li>
+        <li><strong><span>Step 2</span></strong><span>: Clone the repository, and copy the </span><code>koi</code><span>
+            folder and </span><code>koi.desktop</code><span> to </span><code>pykrita</code><span>. (restart krita now if
+            it is open)</span></li>
+        <li><strong><span>Step 3</span></strong><span>: Open Krita and navigate to the python plug-in menu </span><a
+            href='https://scripting.krita.org/lessons/plugins-introduction'><span>reference</span></a></li>
+        <li><strong><span>Step 4</span></strong><span>: Enable the </span><code>koi</code><span> plugin and restart
+            Krita to load the plug-in.</span></li>
+      </ul>
+      <h3 id='the-next-thing-you-will-need-to-do-is-setup-the-backend-server-that-do-all-the-computation'><span>The next
+          thing you will need to do is setup the backend server that do all the computation!</span></h3>
+      <ul>
+        <li>
+          <p><strong><span>Step 0</span></strong><span>: Ensure you have a GPU-accelerated installation of
+            </span><code>pytorch</code><span>. </span><em><span>(You can skip this step if you are using Colab or
+                already have it)</span></em></p>
+          <ul>
+            <li><span>Follow the installation instructions on pytorch&#39;s official </span><a
+                href='https://pytorch.org/get-started/locally/'><span>getting started</span></a><span>.</span></li>
+          </ul>
+        </li>
+        <li>
+          <p><strong><span>Step 1</span></strong><span>: Get the latest version of HuggingFace&#39;s
+            </span><code>diffusers</code><span> from source by going to the </span><a
+              href='https://github.com/huggingface/diffusers'><span>GitHub repo</span></a></p>
+          <ul>
+            <li><span>From here you can clone the repo
+              </span><code>git clone https://github.com/huggingface/diffusers.git</code><span> &amp;
+              </span><code>cd diffusers</code><span> to move into the directory.</span></li>
+            <li><span>Install the package with </span><code>pip install -e .</code></li>
+          </ul>
+        </li>
+        <li>
+          <p><strong><span>Step 2</span></strong><span>: Install this package! I recommend moving out of the diffusers
+              folder if you haven&#39;t already (eg. </span><code>cd ..</code><span>)</span></p>
+          <ul>
+            <li><code>git clone https://github.com/nousr/koi.git</code><span>, then </span><code>cd koi</code><span> and
+              </span><code>pip install -e .</code></li>
+          </ul>
+        </li>
+      </ul>
+      <blockquote>
+        <p><em><strong><span>Note </span>🙋</strong></em></p>
+        <p><span>Before continuing, make sure you accept the terms of service for the
+          </span><code>diffusers</code><span> model </span><a
+            href='https://huggingface.co/CompVis/stable-diffusion-v1-4'><span>link to do so
+              here</span></a><span>.</span></p>
+        <p><span>Next, inside your terminal run the </span><code>huggingface-cli login</code><span> command and paste a
+            token generated from </span><a href='https://huggingface.co/settings/tokens'><span>here</span></a><span>. If
+            you don&#39;t want to repeat this step in the future you can then run
+          </span><code>git config --global credential.helper store</code><span>. </span><em><span>(note: only do this on
+              a computer you trust)</span></em></p>
+      </blockquote>
+      <ul>
+        <li>
+          <p><strong><span>Step 3</span></strong><span>: Run the server by typing </span><code>python server.py</code>
+          </p>
+          <ul>
+            <li><span>If you did everything correctly you should see an address spit out after some time (eg.
+                127.0.0.1:8888)</span></li>
+          </ul>
+        </li>
+        <li>
+          <p><strong><span>Step 4</span></strong><span>: Open Krita, if you haven&#39;t already, and paste your address
+              into the </span><code>endpoint</code><span> field of the plugin</span></p>
+          <ul>
+            <li><span>You will also need to append the actual API endpoint you are using. By default this is
+              </span><code>/api/img2img</code></li>
+            <li><span>If you are using all of the default settings your endpoint field will look something like this
+              </span><code>http://127.0.0.1:8888/api/img2img</code></li>
+          </ul>
+        </li>
+      </ul>
+      <hr />
+      <h2 id='inference-🖌️'><span>Inference 🖌️</span></h2>
+      <p><span>This part is easy!</span></p>
+      <ul>
+        <li><span>Step 1: Create a new canvas that is </span><strong><span>512 x 512</span></strong><span> (px) in size
+            and make a </span><strong><span>single-layer</span></strong><span> sketch </span><em><span>(note: these are
+              temporary restrictions)</span></em><span>.</span></li>
+        <li><span>Step 2: Fill out the prompt field in the </span><code>koi</code><span> panel (default location is
+            somewhere on the right of your screen).</span></li>
+        <li><span>Step 3: Make any additional changes you would like to the inference parameters (strength, steps,
+            etc.)</span></li>
+        <li><span>Step 4: Copy and paste your server&#39;s endpoint to the associated field</span></li>
+        <li><span>Step 5: Click </span><code>dream</code><span>!</span></li>
+      </ul>
+      <hr />
+      <h2 id='faq-❔'><span>FAQ ❔</span></h2>
+      <ul>
+        <li>
+          <p><em><strong><span>What does </span><code>koi</code><span> stand for?</span></strong></em></p>
+          <ul>
+            <li><em><span>Krita Open(source) Img2Img: While support for StableDiffusion is first, the goal is to have
+                  this plug-in be compatible with any model!</span></em></li>
+          </ul>
+        </li>
+        <li>
+          <p><em><strong><span>Why the client/server setup?</span></strong></em></p>
+          <ul>
+            <li><em><span>The goal is to make this as widely available as possible. The server can be run anywhere with
+                  a GPU (i.e. colab) and allow those with low-powered hardware to still use the plug-in!</span></em>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p><strong><span>I&#39;m getting an error with &quot;set-size&quot;</span></strong></p>
+          <ul>
+            <li><span>This usually happens when you either forget &quot;/api/img2img&quot; at the end of your endpoint
+                when copying it into the plugin OR you have some issue with your backend server (check the output on
+                your server for more information).</span></li>
+          </ul>
+        </li>
+      </ul>
+      <hr />
+      <h1 id='todo'><span>TODO</span></h1>
+      <ul>
+        <li class='md-task-list-item task-list-item task-list-done'><input type='checkbox' checked />
+          <p><span>Add colab backend example</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Flesh out UI</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Move to CompVis repo</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Add CI</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Abstract away drop-in models for the server</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Improve documentation</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Add DreamStudio API support</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Add support for arbitrary canvas size &amp; selection-based img2img</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Add support for masks</span></p>
+        </li>
+        <li class='md-task-list-item task-list-item task-list-not-done'><input type='checkbox' />
+          <p><span>Offer more configuration options</span></p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>(function () { var e = document.body.parentElement, t = [], n = null, i = document.body.classList.contains("typora-export-collapse-outline"), r = function (e, t, n) { document.addEventListener(e, function (e) { if (!e.defaultPrevented) for (var i = e.target; i && i != this; i = i.parentNode)if (i.matches(t)) { !1 === n.call(i, e) && (e.preventDefault(), e.stopPropagation()); break } }, !1) }; function o() { return e.scrollTop } r("click", ".outline-expander", function (e) { var t = this.closest(".outline-item-wrapper").classList; return t.contains("outline-item-open") ? t.remove("outline-item-open") : t.add("outline-item-open"), d(), !1 }), r("click", ".outline-item", function (e) { var t = this.querySelector(".outline-label"); if (location.hash = "#" + t.getAttribute("href"), i) { var n = this.closest(".outline-item-wrapper").classList; n.contains("outline-item-open") || n.add("outline-item-open"), c(), n.add("outline-item-active") } }); var a, s, l = function () { var e = o(); n = null; for (var i = 0; i < t.length && t[i][1] - e < 60; i++)n = t[i] }, c = function () { document.querySelectorAll(".outline-item-active").forEach(e => e.classList.remove("outline-item-active")), document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e => e.classList.remove("outline-item-open")) }, d = function () { if (n) { c(); var e = document.querySelector('.outline-label[href="#' + (CSS.escape ? CSS.escape(n[0]) : n[0]) + '"]'); if (e) if (i) { var t = e.closest(".outline-item-open>ul>.outline-item-wrapper"); if (t) t.classList.add("outline-item-active"); else { for (var r = (e = e.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper"); r;)r = (e = r).parentElement.closest(".outline-item-wrapper"); e.classList.add("outline-item-active") } } else e.closest(".outline-item-wrapper").classList.add("outline-item-active") } }; window.addEventListener("scroll", function (e) { a && clearTimeout(a), a = setTimeout(function () { l(), d() }, 300) }); var u = function () { s = setTimeout(function () { !function () { t = []; var e = o(); document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n => { var i = n.getAttribute("id"); t.push([i, e + n.getBoundingClientRect().y]) }) }(), l(), d() }, 300) }; window.addEventListener("resize", function (e) { s && clearTimeout(s), u() }), u() })();</script>
+</body>
+
+</html>
