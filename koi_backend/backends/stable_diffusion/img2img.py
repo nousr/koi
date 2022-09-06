@@ -28,7 +28,7 @@ def preprocess_image(image: Image):
     image = image.resize((w, h), resample=Image.Resampling.LANCZOS)
     image = np.array(image).astype(np.float32) / 255.0
     image = image[None].transpose(0, 3, 1, 2)
-    image = torch.from_numpy(image)
+    image = torch.from_numpy(image).cuda()
 
     return image
 
