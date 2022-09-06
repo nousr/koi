@@ -130,6 +130,8 @@ def img2img():
     # hijack headers as the sample_args and inject image
     sample_args = {**header_to_sample_args(headers), "init_image": image}
 
+    print(sample_args)
+
     # sample from model
     samples = model.img2img(sample_args=sample_args)
 
