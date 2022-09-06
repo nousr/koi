@@ -5,7 +5,7 @@ references:
 """
 
 from contextlib import nullcontext
-
+from time import time
 import k_samplers
 import numpy as np
 import torch
@@ -70,15 +70,27 @@ def img2img(model, sample_args):
     if not exists(sample_args["Init-Image"]):
         return None
 
+    print("preparing model")
+    tic = time.now()
     # prepare model
     wrapped_model = k_samplers.CompVisDenoiser(model)
+    toc = time.now()
+    print(f"prepared model in {toc-tic} seconds")
 
+    print("preparing init image")
+    tic = time.now()
     # prepare the init image
     init_image = preprocess_image(sample_args["Init-Image"])
     x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["Batch-Size"]), model=model)
+    toc = time.now()
+    print(f"prepared init image in {toc-tic} seconds")
 
+    print("getting sampler")
+    tic = time.now()
     # get the sampler
     sampler = get_sampler(sampler_name=sample_args["Sampler"])
+    toc = time.now()
+    print(f"got sampler in {toc-tic} seconds")
 
     # strength
     if not (0.0 <= sample_args["Image-Strength"] <= 1.0):
@@ -95,7 +107,7 @@ def img2img(model, sample_args):
     # keep track of all samples
     samples = []
 
-    with precision_scope():
+    with precision_scope("cuda"):
         with model.ema_scope():
 
             # get learned conditioning
