@@ -124,6 +124,8 @@ def img2img():
     # get the image data and headers
     data, headers = get_contents(request, decode_method=None, as_json=False)
 
+    print(headers)
+
     # get PIL image from data
     image = data_to_pil(data)
 
