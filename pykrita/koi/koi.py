@@ -95,8 +95,8 @@ class Koi(DockWidget):
             "Prompt": str(self.prompt.text()),
             "Sample-Steps": str(self.steps.value()),
             "Random-Seed": str(self.seed.value()),
-            "Cond-Scale": str(1.0 - self.sketch_strengh.value()),
-            "Prompt-Strength": str(self.prompt_strength.value()),
+            "Image-Strength": str(1.0 - self.sketch_strengh.value()),
+            "Cond-Scale": str(self.prompt_strength.value()),
             "Batch-Size": "1", # TODO: add dialog
             "Precision": "autocast", # TODO: add dialog
             "Sampler": "euler_ancestral"
