@@ -1,0 +1,1 @@
+from koi_backend.backends import stable_diffusion
