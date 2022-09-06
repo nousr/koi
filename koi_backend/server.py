@@ -127,7 +127,7 @@ def img2img():
     print(headers)
 
     # get PIL image from data
-    image = data_to_pil(data)
+    image = data_to_pil(data).convert("RGB")
 
     # hijack headers as the sample_args and inject image
     sample_args = header_to_sample_args(headers)
