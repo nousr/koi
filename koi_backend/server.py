@@ -60,10 +60,10 @@ def get_contents(request, decode_method, as_json=False):
     Return the data and headers of a request
     """
 
-    headers = request.headers()
+    headers = request.headers
     data = request.data
 
-    if decode_method != "" or decode_method != None:
+    if decode_method == "" or decode_method == None:
         data = data.decode(decode_method)
 
     if as_json:
