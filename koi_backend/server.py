@@ -33,7 +33,7 @@ def header_to_sample_args(headers):
     args = {}
 
     for key, value in headers.items():
-        if key in arg_map.items():
+        if key.replace("-", "_").lower() in arg_map.items():
             args[key] = arg_map[key](value)
 
     return args
