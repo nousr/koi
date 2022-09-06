@@ -99,6 +99,7 @@ class Koi(DockWidget):
             "Prompt-Strength": str(self.prompt_strength.value()),
             "Batch-Size": "1", # TODO: add dialog
             "Precision": "autocast", # TODO: add dialog
+            "Sampler": "euler_ancestral"
         }
 
         return headers
