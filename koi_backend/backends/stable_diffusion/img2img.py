@@ -78,10 +78,10 @@ def img2img(model, sample_args):
     print(f"prepared model in {toc-tic} seconds")
 
     print("getting sampler")
-    tic = time.tim()
+    tic = time.time()
     # get the sampler
     sampler = get_sampler(sampler_name=sample_args["Sampler"])
-    toc = time.timee()
+    toc = time.time()
     print(f"got sampler in {toc-tic} seconds")
 
     # strength
