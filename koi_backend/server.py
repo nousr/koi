@@ -8,10 +8,8 @@ from flask_ngrok import run_with_ngrok
 
 from koi_backend import harness
 
-# load the default model
-click.secho(f"Loading Default Model...", fg="yellow")
-model = harness.StableDiffusionHarness()
-click.secho("Done!", fg="green")
+# init model
+model = None
 
 # init the flask server
 app = Flask(__name__)
@@ -162,11 +160,15 @@ def inpaint():
 @click.command()
 @click.option("--host", default="127.0.0.1")
 @click.option("--port", default=8888)
-@click.option("--use_ngrok", default=False)
+@click.option("--use-ngrok", default=False)
+@click.option("--sd-checkpoint-path", default="sd-v1-4.ckpt")
 def main(host, port, use_ngrok):
     """
     Initialize the server and enter a forever-loop to listen for requests.
     """
+    click.secho(f"Loading Default Model...", fg="yellow")
+    model = harness.StableDiffusionHarness()
+    click.secho("Done!", fg="green")
 
     if use_ngrok:
         run_with_ngrok(app)
