@@ -20,7 +20,7 @@ def load(config_path=None, checkpoint_path=None):
     if not os.path.exists(DEFAULT_CHECKPOINT_LOCATION):
         secho("CHECKPOINT MISSING!", fg="red")
         secho(
-            f"Hint: ensure your stable diffusion checkpoint is placed in {DEFAULT_CHECKPOINT_LOCATION} and named 'sd-v1-4.ckpt'",
+            f"Hint: ensure your stable diffusion checkpoint is placed in {checkpoint_path} and named 'sd-v1-4.ckpt'",
             fg="red",
         )
 
