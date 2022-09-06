@@ -5,7 +5,6 @@ references:
 """
 
 from contextlib import nullcontext
-from random import sample
 
 import k_samplers
 import numpy as np
@@ -48,8 +47,8 @@ def get_sampler(sampler_name):
     Retrieve the requested sampler from k_samplers.
     """
 
-    sampler_name += "sample_"
-    assert hasattr(k_samplers, sampler_name), "This sampler does not exist."
+    sampler_name = "sample_" + sampler_name
+    assert hasattr(k_samplers, sampler_name), f"The {sampler_name} sampler does not exist."
     return getattr(k_samplers, sampler_name)
 
 
