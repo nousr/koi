@@ -45,15 +45,15 @@ class Koi(DockWidget):
         self.sketch_strengh.setSingleStep(0.05)
         self.sketch_strengh.setValue(0.25)
 
-        self.prompt_strength = QDoubleSpinBox(self.input_widget)
-        self.prompt_strength.setRange(1.0, 20.00)
-        self.prompt_strength.setValue(7.5)
+        self.cond_scale = QDoubleSpinBox(self.input_widget)
+        self.cond_scale.setRange(1.0, 20.00)
+        self.cond_scale.setValue(7.5)
 
         self.input_layout.addRow("Prompt", self.prompt)
         self.input_layout.addRow("Steps", self.steps)
-        self.input_layout.addRow("Seed", self.seed)
-        self.input_layout.addRow("Sketch strength", self.sketch_strengh)
-        self.input_layout.addRow("Prompt strength", self.prompt_strength)
+        self.input_layout.addRow("Random Seed", self.seed)
+        self.input_layout.addRow("Sketch-Strength", self.sketch_strengh)
+        self.input_layout.addRow("Cond-Scale", self.cond_scale)
 
         self.input_widget.setLayout(self.input_layout)
 
@@ -96,7 +96,7 @@ class Koi(DockWidget):
             "Sample-Steps": str(self.steps.value()),
             "Random-Seed": str(self.seed.value()),
             "Image-Strength": str(1.0 - self.sketch_strengh.value()),
-            "Cond-Scale": str(self.prompt_strength.value()),
+            "Cond-Scale": str(self.cond_scale.value()),
             "Batch-Size": "1", # TODO: add dialog
             "Precision": "autocast", # TODO: add dialog
             "Sampler": "euler_ancestral"
