@@ -21,20 +21,19 @@ def header_to_sample_args(headers):
     """
 
     arg_map = {
-        "sample_steps": int,
-        "cond_scale": float,
-        "batch_size": int,
-        "image_strength": float,
-        "precision": str,
-        "random_seed": int,
-        "prompt": str,
+        "Sample-Steps": int,
+        "Cond-Scale": float,
+        "Batch-Size": int,
+        "Image-Strength": float,
+        "Precision": str,
+        "Random-Seed": int,
+        "Prompt": str,
     }
 
     args = {}
 
-    for key, value in headers.items():
-        if key.replace("-", "_").lower() in arg_map.items():
-            args[key] = arg_map[key](value)
+    for key, func in arg_map.items():
+        args[key] = func(headers[key])
 
     return args
 
@@ -89,6 +88,7 @@ def change_model():
     """
 
     global model
+    global request
 
     data, _ = get_contents(request=request, decode_method="utf-8", as_json=True)
 
@@ -131,9 +131,7 @@ def img2img():
 
     # hijack headers as the sample_args and inject image
     sample_args = header_to_sample_args(headers)
-    sample_args.update({"init_image": image})
-
-    print(sample_args)
+    sample_args.update({"Init-Image": image})
 
     # sample from model
     samples = model.img2img(sample_args=sample_args)
@@ -174,7 +172,7 @@ def main(host, port, use_ngrok, sd_checkpoint_path, sd_config_path):
     """
 
     global model
-    
+
     click.secho(f"Loading Default Model...", fg="yellow")
     model = harness.StableDiffusionHarness(checkpoint_path=sd_checkpoint_path, config_path=sd_config_path)
     click.secho("Done!", fg="green")

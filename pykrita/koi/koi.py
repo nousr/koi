@@ -92,13 +92,13 @@ class Koi(DockWidget):
         """
 
         headers = {
-            "prompt": str(self.prompt.text()),
-            "sample_steps": str(self.steps.value()),
-            "random_seed": str(self.seed.value()),
-            "cond_scale": str(1.0 - self.sketch_strengh.value()),
-            "prompt_strength": str(self.prompt_strength.value()),
-            "batch_size": "1", # TODO: add dialog
-            "precision": "autocast", # TODO: add dialog
+            "Prompt": str(self.prompt.text()),
+            "Sample-Steps": str(self.steps.value()),
+            "Random-Seed": str(self.seed.value()),
+            "Cond-Scale": str(1.0 - self.sketch_strengh.value()),
+            "Prompt-Strength": str(self.prompt_strength.value()),
+            "Batch-Size": "1", # TODO: add dialog
+            "Precision": "autocast", # TODO: add dialog
         }
 
         return headers

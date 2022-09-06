@@ -68,30 +68,30 @@ def img2img(model, sample_args):
         - samples (list[PIL.Image]): Output images.
         - error (str): Error message describing what went wrong.
     """
-    if not exists(sample_args["init_image"]):
+    if not exists(sample_args["Init-Image"]):
         return None
 
     # prepare model
     wrapped_model = k_samplers.CompVisDenoiser(model)
 
     # prepare the init image
-    init_image = preprocess_image(sample_args["init_image"])
-    x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["batch_size"]), model=model)
+    init_image = preprocess_image(sample_args["Init-Image"])
+    x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["Batch-Size"]), model=model)
 
     # get the sampler
-    sampler = get_sampler(sampler_name=sample_args["sampler"])
+    sampler = get_sampler(sampler_name=sample_args["Sampler"])
 
     # strength
-    if not (0.0 <= sample_args["image_strength"] <= 1.0):
+    if not (0.0 <= sample_args["Image-Strength"] <= 1.0):
         return "Image strength given was out of range"
 
-    t_enc = int(sample_args["image_strength"] * sample_args["sample_steps"])
+    t_enc = int(sample_args["Image-Strength"] * sample_args["Sample-Steps"])
 
     # context
-    precision_scope = autocast if sample_args["precision"] == "autocast" else nullcontext
+    precision_scope = autocast if sample_args["Precision"] == "autocast" else nullcontext
 
     # set seed
-    torch.manual_seed(sample_args["random_seed"])
+    torch.manual_seed(sample_args["Random-Seed"])
 
     # keep track of all samples
     samples = []
@@ -101,17 +101,17 @@ def img2img(model, sample_args):
 
             # get learned conditioning
             uc = None
-            if sample_args["cond_scale"] != 1.0:
-                uc = model.get_learned_conditioning(sample_args["batch_Size"] * [""])
-            c = model.get_learned_conditioning(sample_args["prompt"])
+            if sample_args["Cond-Scale"] != 1.0:
+                uc = model.get_learned_conditioning(sample_args["Batch-Size"] * [""])
+            c = model.get_learned_conditioning(sample_args["Prompt"])
 
             # setup
-            sigmas = wrapped_model.get_sigmas(sample_args["sample_steps"])
-            noise = torch.randn_like(x0) * sigmas[sample_args["sample_steps"] - t_enc - 1]
+            sigmas = wrapped_model.get_sigmas(sample_args["Sample-Steps"])
+            noise = torch.randn_like(x0) * sigmas[sample_args["Sample-Steps"] - t_enc - 1]
             xi = x0 + noise
-            sigma_sched = sigmas[sample_args["sample_steps"] - t_enc - 1 :]
+            sigma_sched = sigmas[sample_args["Sample-Steps"] - t_enc - 1 :]
             model_wrap_cfg = k_samplers.CFGDenoiser(wrapped_model)
-            extra_args = {"cond": c, "uncond": uc, "cond_scale": sample_args["cond_scale"]}
+            extra_args = {"cond": c, "uncond": uc, "Cond-Scale": sample_args["Cond-Scale"]}
 
             # sample
             samples_ddim = sampler(model_wrap_cfg, xi, sigma_sched, extra_args=extra_args)
