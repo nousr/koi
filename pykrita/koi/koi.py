@@ -93,10 +93,12 @@ class Koi(DockWidget):
 
         headers = {
             "prompt": str(self.prompt.text()),
-            "steps": str(self.steps.value()),
-            "seed": str(self.seed.value()),
-            "sketch_strength": str(1.0 - self.sketch_strengh.value()),
+            "sample_steps": str(self.steps.value()),
+            "random_seed": str(self.seed.value()),
+            "cond_scale": str(1.0 - self.sketch_strengh.value()),
             "prompt_strength": str(self.prompt_strength.value()),
+            "batch_size": str(1),
+            "precision": "autocast",
         }
 
         return headers

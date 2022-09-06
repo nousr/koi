@@ -76,7 +76,7 @@ def img2img(model, sample_args):
 
     # prepare the init image
     init_image = preprocess_image(sample_args["init_image"])
-    x0 = get_init_latent(init_image=init_image, batch_size=sample_args["batch_size"], model=model)
+    x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["batch_size"]), model=model)
 
     # get the sampler
     sampler = get_sampler(sampler_name=sample_args["sampler"])

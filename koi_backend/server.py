@@ -17,6 +17,30 @@ click.secho("Done!", fg="green")
 app = Flask(__name__)
 
 
+def header_to_sample_args(headers):
+    """
+    Convert HTTP headers to sample arguments.
+    """
+
+    arg_map = {
+        "sample_steps": int,
+        "cond_scale": float,
+        "batch_size": int,
+        "image_strength": float,
+        "precision": str,
+        "random_seed": int,
+        "prompt": str,
+    }
+
+    args = {}
+
+    for key, value in headers.items():
+        if key in arg_map.items():
+            args[key] = arg_map[key](value)
+
+    return args
+
+
 def data_to_pil(data):
     return Image.open(BytesIO(data))
 
@@ -106,7 +130,7 @@ def img2img():
     image = data_to_pil(data)
 
     # hijack headers as the sample_args and inject image
-    sample_args = {**headers, "init_image": image}
+    sample_args = {**header_to_sample_args(headers), "init_image": image}
 
     # sample from model
     samples = model.img2img(sample_args=sample_args)
