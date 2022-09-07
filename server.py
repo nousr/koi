@@ -6,6 +6,7 @@ from io import BytesIO
 from torch import autocast
 from diffusers import StableDiffusionImg2ImgPipeline
 from click import secho
+from zipfile import ZipFile
 
 # TODO: add command line arguments
 
@@ -23,6 +24,8 @@ secho("Finished!", fg="green")
 
 app = Flask(__name__)
 
+def get_name(prompt, seed):
+  return f'{prompt}-{seed}'
 
 def seed_everything(seed: int):
     import random, os
@@ -45,23 +48,38 @@ def img2img():
     buff = BytesIO(data)
     img = Image.open(buff).convert("RGB")
 
-    seed_everything(int(headers["seed"]))
+    seed = int(headers["seed"])
+    prompt = headers['prompt']
 
-    with autocast("cuda"):
-        return_image = pipe(
-            init_image=img,
-            prompt=headers["prompt"],
-            strength=float(headers["sketch_strength"]),
-            guidance_scale=float(headers["prompt_strength"]),
-            num_inference_steps=int(headers["steps"]),
-        )["sample"][0]
 
-    return_bytes = BytesIO()
-    return_image.save(return_bytes, format="PNG")
-    return_bytes.read()
-    return_bytes.seek(0)
+    print(r.headers)
 
-    return send_file(return_bytes, mimetype="image/png")
+    zip_stream = BytesIO()
+    with ZipFile(zip_stream, 'w') as zf:
+
+        for index in range(int(headers['variations'])):
+            variation_seed = seed + index
+            seed_everything(variation_seed)
+        
+            with autocast("cuda"):
+                return_image = pipe(
+                    init_image=img,
+                    prompt=prompt,
+                    strength=float(headers["sketch_strength"]),
+                    guidance_scale=float(headers["prompt_strength"]),
+                    num_inference_steps=int(headers["steps"]),
+                )["sample"][0]
+
+
+            return_bytes = BytesIO()
+            return_image.save(return_bytes, format="JPEG")
+
+            return_bytes.seek(0)
+            zf.writestr(get_name(prompt, variation_seed), return_bytes.read())
+
+    zip_stream.seek(0)
+
+    return send_file(zip_stream, mimetype="application/zip")
 
 
 app.run(host="0.0.0.0", port=8888)
