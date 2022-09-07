@@ -36,7 +36,7 @@ class Koi(DockWidget):
         )
 
         self.steps = QSpinBox(self.input_widget)
-        self.steps.setRange(5, 500)
+        self.steps.setRange(5, 300)
         self.steps.setValue(32)
 
         self.variations = QSpinBox(self.input_widget)
@@ -106,7 +106,7 @@ class Koi(DockWidget):
             "variations": str(self.variations.value()),
             "prompt": self._prompt_text(),
             "steps": str(self.steps.value()),
-            "seed": str(self.seed.value()),
+            "seed": str(self.base_seed.value()),
             "sketch_strength": str(self.sketch_strengh.value()),
             "prompt_strength": str(self.prompt_strength.value()),
         }
