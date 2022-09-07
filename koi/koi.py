@@ -4,7 +4,8 @@ from PyQt5.QtGui import QImage
 from krita import DockWidget, Krita
 from urllib import request
 from io import BytesIO
-
+from zipfile import ZipFile
+import re
 
 class Koi(DockWidget):
     def __init__(self):
@@ -28,9 +29,9 @@ class Koi(DockWidget):
 
         self.input_layout = QFormLayout()
 
-        self.prompt = QLineEdit()
+        self.prompt = QPlainTextEdit(self.input_widget)
         self.prompt.setPlaceholderText("Describe your end goal...")
-        self.prompt.setText(
+        self.prompt.setPlainText(
             "A beautiful mountain landscape in the style of greg rutkowski, oils on canvas."
         )
 
@@ -38,9 +39,13 @@ class Koi(DockWidget):
         self.steps.setRange(5, 150)
         self.steps.setValue(32)
 
-        self.seed = QSpinBox(self.input_widget)
-        self.seed.setRange(1, 100000000)
-        self.seed.setValue(1337)
+        self.variations = QSpinBox(self.input_widget)
+        self.variations.setRange(1, 50)
+        self.variations.setValue(1)
+
+        self.base_seed = QSpinBox(self.input_widget)
+        self.base_seed.setRange(1, 100000000)
+        self.base_seed.setValue(1337)
 
         self.sketch_strengh = QDoubleSpinBox(self.input_widget)
         self.sketch_strengh.setRange(0.05, 0.95)
@@ -52,8 +57,9 @@ class Koi(DockWidget):
         self.prompt_strength.setValue(7.5)
 
         self.input_layout.addRow("Prompt", self.prompt)
+        self.input_layout.addRow("Variations", self.variations)
         self.input_layout.addRow("Steps", self.steps)
-        self.input_layout.addRow("Seed", self.seed)
+        self.input_layout.addRow("Base Seed", self.base_seed)
         self.input_layout.addRow("Sketch strength", self.sketch_strengh)
         self.input_layout.addRow("Prompt strength", self.prompt_strength)
 
@@ -86,7 +92,10 @@ class Koi(DockWidget):
         """
         pass
 
-    def get_extra_args(self):
+    def _prompt_text(self):
+        return self.prompt.toPlainText().replace("\n", " ")
+
+    def _get_extra_args(self):
         """
         Take all input from user and construct a mapping object.
 
@@ -94,52 +103,66 @@ class Koi(DockWidget):
         """
 
         headers = {
-            "prompt": str(self.prompt.text()),
+            "variations": str(self.variations.value()),
+            "prompt": self._prompt_text(),
             "steps": str(self.steps.value()),
-            "seed": str(self.seed.value()),
+            "seed": str(self.base_seed.value()),
             "sketch_strength": str(1.0-self.sketch_strengh.value()),
             "prompt_strength": str(self.prompt_strength.value()),
         }
 
         return headers
 
-    def get_endpoint(self):
+    def _get_endpoint(self):
         return str(self.endpoint.text())
 
-    def get_next_layer_id(self):
+    def _next_layer_id(self):
         self.ITER += 1
-        return f"dream_{self.ITER}"
+        return self.ITER
+
+    def _safe_layer_name(self, name):
+        return re.sub('[^A-Za-z0-9-_]+', '', name.replace(' ', '_'))
+
+    def _add_paint_layer(self, doc, root, returned_file, name):
+        dream_layer = doc.createNode(f'{self._safe_layer_name(name)}-{self._next_layer_id()}', "paintLayer")
+        root.addChildNode(dream_layer, None)
+
+        # get a pointer to the image's bits and add them to the new layer
+        ptr = returned_file.bits()
+        ptr.setsize(returned_file.byteCount())
+        dream_layer.setPixelData(
+            QByteArray(ptr.asstring()),
+            0,
+            0,
+            returned_file.width(),
+            returned_file.height(),
+        )
+
+    def _get_timeout(self):
+        return int(1.5 * self.steps.value()) * self.variations.value()
 
     def pingServer(self):
         # get the current layer as a I/O buffer
         image_buffer = self.layer2buffer()
 
-        headers = self.get_extra_args()
+        headers = self._get_extra_args()
         headers.update({"Content-Type": "application/octet-stream"})
 
-        r = request.Request(url=self.get_endpoint(), data=image_buffer, headers=headers)
+        response_url = request.Request(url=self._get_endpoint(), data=image_buffer, headers=headers)
 
-        # wait for response and read image
-        with request.urlopen(r, timeout=60) as response:
-            returned_image = QImage.fromData(response.read())
-
-        # create a new layer and add it to the document
         application = Krita.instance()
         doc = application.activeDocument()
         root = doc.rootNode()
-        dream_layer = doc.createNode(self.get_next_layer_id(), "paintLayer")
-        root.addChildNode(dream_layer, None)
 
-        # get a pointer to the image's bits and add them to the new layer
-        ptr = returned_image.bits()
-        ptr.setsize(returned_image.byteCount())
-        dream_layer.setPixelData(
-            QByteArray(ptr.asstring()),
-            0,
-            0,
-            returned_image.width(),
-            returned_image.height(),
-        )
+        # wait for response and read image
+        with request.urlopen(response_url, timeout=self._get_timeout()) as response:
+            archive = ZipFile(BytesIO(response.read()))
+            filenames = archive.namelist()
+            for name in filenames:
+                file = archive.read(name)
+            
+                returned_file = QImage.fromData(file)
+                self._add_paint_layer(doc, root, returned_file, name)                
 
         # update user
         doc.refreshProjection()
