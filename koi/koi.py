@@ -40,7 +40,7 @@ class Koi(DockWidget):
         self.steps.setValue(32)
 
         self.variations = QSpinBox(self.input_widget)
-        self.variations.setRange(1, 50)
+        self.variations.setRange(1, 8)
         self.variations.setValue(1)
 
         self.base_seed = QSpinBox(self.input_widget)
