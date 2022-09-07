@@ -41,7 +41,7 @@ def preprocess_image(image: Image):
     image = image[None].transpose(0, 3, 1, 2)
     image = torch.from_numpy(image)
 
-    image.cuda()
+    image = image.cuda()
 
     return 2.0 * image - 1.0
 
