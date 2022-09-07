@@ -80,22 +80,16 @@ def img2img(model, sample_args):
         - samples (list[PIL.Image]): Output images.
         - error (str): Error message describing what went wrong.
     """
+    tic = time.time()
+
     if not exists(sample_args["Init-Image"]):
         return None
 
-    print("preparing model")
-    tic = time.time()
     # prepare model
     wrapped_model = k_samplers.CompVisDenoiser(model)
-    toc = time.time()
-    print(f"prepared model in {toc-tic} seconds")
 
-    print("getting sampler")
-    tic = time.time()
     # get the sampler
     sampler = get_sampler(sampler_name=sample_args["Sampler"])
-    toc = time.time()
-    print(f"got sampler in {toc-tic} seconds")
 
     # strength
     if not (0.0 <= sample_args["Image-Strength"] <= 1.0):
@@ -116,12 +110,8 @@ def img2img(model, sample_args):
         with model.ema_scope():
 
             # prepare the init image
-            print("preparing init image")
-            tic = time.time()
             init_image = preprocess_image(sample_args["Init-Image"])
             x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["Batch-Size"]), model=model)
-            toc = time.time()
-            print(f"prepared init image in {toc-tic} seconds")
 
             # get learned conditioning
             uc = None
@@ -149,4 +139,7 @@ def img2img(model, sample_args):
                 x_sample = 255.0 * rearrange(x_sample.detach().cpu().numpy(), "c h w -> h w c")
                 samples.append(Image.fromarray(x_sample.astype(np.uint8)))
 
+    toc = time.time()
+
+    print(f"Entire Call Took: {toc-tic} seconds.")
     return samples
