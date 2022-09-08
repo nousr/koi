@@ -61,8 +61,8 @@ def get_sampler(sampler_name):
     """
 
     sampler_name = "sample_" + sampler_name
-    assert hasattr(k_samplers, sampler_name), f"The {sampler_name} sampler does not exist."
-    return getattr(k_samplers, sampler_name)
+    assert hasattr(k_samplers.sampling, sampler_name), f"The {sampler_name} sampler does not exist."
+    return getattr(k_samplers.sampling, sampler_name)
 
 
 @torch.no_grad()
@@ -86,7 +86,7 @@ def img2img(model, sample_args):
         return None
 
     # prepare model
-    wrapped_model = k_samplers.CompVisDenoiser(model)
+    wrapped_model = k_samplers.external.CompVisDenoiser(model)
 
     # get the sampler
     sampler = get_sampler(sampler_name=sample_args["Sampler"])
