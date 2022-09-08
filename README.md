@@ -33,8 +33,8 @@ To launch the backend server you can either use google colab or navigate to `koi
 > use `python server.py --help` for more info on the available options.
 
 # Bugs
-
 If you run into any bugs using this branch please include:
-  - the error recieved inside of Krita
-  - the error recieved inside of your backend server (colab/local)
-  - 
+  - Open your issue with a `[DEV]` tag in your title to differentiate between issues with the stable branch.
+  - The error recieved inside of Krita
+  - The error recieved inside of your backend server (colab/local)
+  - Your version of krita
