@@ -6,6 +6,7 @@ from urllib import request
 from io import BytesIO
 from zipfile import ZipFile
 import re
+import random
 
 class Koi(DockWidget):
     def __init__(self):
@@ -18,6 +19,9 @@ class Koi(DockWidget):
         self.ITER = 0
 
         self.setWindowTitle("Koi")
+
+        # Initializing random seed ===
+        random.seed(None) 
 
         # Main WIdget ===
         self.mainWidget = QWidget(self)
@@ -43,8 +47,10 @@ class Koi(DockWidget):
         self.variations.setRange(1, 8)
         self.variations.setValue(1)
 
+        self.base_seed_min = 1
+        self.base_seed_max = 100000000
         self.base_seed = QSpinBox(self.input_widget)
-        self.base_seed.setRange(1, 100000000)
+        self.base_seed.setRange(self.base_seed_min, self.base_seed_max)
         self.base_seed.setValue(1337)
 
         self.sketch_strengh = QDoubleSpinBox(self.input_widget)
@@ -66,6 +72,19 @@ class Koi(DockWidget):
         self.input_widget.setLayout(self.input_layout)
 
         self.mainWidget.layout().addWidget(self.input_widget)
+
+        # Randomize seed button ===
+        self.random = QPushButton(self.mainWidget)
+        self.random.setText("Randomize Seed")
+        self.random.clicked.connect(self.randomizeSeed)
+
+        self.mainWidget.layout().addWidget(self.random)
+
+        # Auto random seed checkbox ===
+        self.auto_random = QCheckBox(self.mainWidget)
+        self.auto_random.setText("Auto randomize after Dream")
+
+        self.mainWidget.layout().addWidget(self.auto_random)
 
         # Endpoint Settings ===
         self.endpoint_widget = QWidget(self.mainWidget)
@@ -141,6 +160,9 @@ class Koi(DockWidget):
     def _get_timeout(self):
         return int(1.5 * self.steps.value()) * self.variations.value()
 
+    def randomizeSeed(self):
+        self.base_seed.setValue(random.randint(self.base_seed_min,self.base_seed_max-self.variations.value()))
+
     def pingServer(self):
         # get the current layer as a I/O buffer
         image_buffer = self.layer2buffer()
@@ -163,6 +185,10 @@ class Koi(DockWidget):
             
                 returned_file = QImage.fromData(file)
                 self._add_paint_layer(doc, root, returned_file, name)                
+
+        # check for auto random needed
+        if self.auto_random.isChecked():
+            self.randomizeSeed()
 
         # update user
         doc.refreshProjection()
