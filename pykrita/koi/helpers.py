@@ -166,7 +166,7 @@ def image_to_buffer(image):
 
 
 def buffer_to_image(buffer):
-    QImage.fromData(buffer.read())
+    return QImage.fromData(buffer.read())
 
 
 def compile_endpoint(base_url, action):
