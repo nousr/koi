@@ -101,18 +101,13 @@ def img2img(model, sample_args):
 
     t_enc = int(sample_args["Image-Strength"] * sample_args["Sample-Steps"])
 
-    # context
-    precision_scope = (
-        autocast if sample_args["Precision"] == "autocast" else nullcontext
-    )
-
     # set seed
     torch.manual_seed(sample_args["Random-Seed"])
 
     # keep track of all samples
     samples = []
 
-    with precision_scope("cuda"):
+    with autocast("cuda"):
         with model.ema_scope():
 
             # prepare the init image
