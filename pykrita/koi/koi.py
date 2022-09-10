@@ -1,82 +1,181 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QImage
 from krita import DockWidget, Krita
 from urllib import request
-from io import BytesIO
+from koi.helpers import (
+    make_selection,
+    NOT_IMPLEMENTED,
+    selection_to_image,
+    image_to_buffer,
+    get_selection,
+    image_to_layer,
+    get_layer,
+    buffer_to_image,
+    exists,
+    compile_endpoint,
+    ERROR,
+)
+
+TIMEOUT = 60  # maximum seconds to wait for response from server
 
 
 class Koi(DockWidget):
     def __init__(self):
-        """
-        This sets up a basic user interface to interact with.
-
-        TODO/FIXME: Adopt a better approach for managing the UI.
-        """
         super().__init__()
-        self.ITER = 0
+        self.setWindowTitle("KOI")
+        mainWidget = QWidget(self)
+        self.setWidget(mainWidget)
 
-        self.setWindowTitle("Koi")
+        mainLayout = QGridLayout()
 
-        # Main WIdget ===
-        self.mainWidget = QWidget(self)
-        self.mainWidget.setLayout(QVBoxLayout())
-        self.setWidget(self.mainWidget)
+        # === Prompt Area
+        PromptGroup = QGroupBox("Prompt", mainWidget)
+        promptLayout = QGridLayout()
 
-        # Input & Prompt Settings ===
-        self.input_widget = QWidget(self.mainWidget)
+        self.promptText = QPlainTextEdit(PromptGroup)
+        self.promptText.setPlainText(
+            "A txt2img of a distant galaxy, by Caspar David Friedrich, matte painting trending on artstation HQ"
+        )
+        promptLayout.addWidget(self.promptText, 1, 0)
 
-        self.input_layout = QFormLayout()
+        PromptGroup.setLayout(promptLayout)
+        # === End Prompt Area
 
-        self.prompt = QLineEdit()
-        self.prompt.setPlaceholderText("Describe your end goal...")
-        self.prompt.setText("A beautiful mountain landscape in the style of greg rutkowski, oils on canvas.")
+        # === Settings Area
+        SettingGroup = QGroupBox("Settings", mainWidget)
+        settingLayout = QGridLayout()
 
-        self.steps = QSpinBox(self.input_widget)
-        self.steps.setRange(5, 150)
-        self.steps.setValue(32)
+        # sampler label
+        samplerBoxLabel = QLabel("Sampler", SettingGroup)
+        settingLayout.addWidget(samplerBoxLabel, 0, 0)
 
-        self.seed = QSpinBox(self.input_widget)
-        self.seed.setRange(1, 100000000)
-        self.seed.setValue(1337)
+        # sampler box
+        self.samplerBox = QComboBox(SettingGroup)
+        self.samplerBox.addItem("euler_ancestral")
+        self.samplerBox.addItem("euler")
+        self.samplerBox.addItem("heun")
+        self.samplerBox.addItem("dpm_2_ancestral")
+        self.samplerBox.addItem("dpm_2")
+        self.samplerBox.addItem("lms")
+        settingLayout.addWidget(self.samplerBox, 0, 1)
 
-        self.sketch_strengh = QDoubleSpinBox(self.input_widget)
-        self.sketch_strengh.setRange(0.05, 0.95)
-        self.sketch_strengh.setSingleStep(0.05)
-        self.sketch_strengh.setValue(0.25)
+        # steps
+        stepBoxLabel = QLabel("Steps", SettingGroup)
+        settingLayout.addWidget(stepBoxLabel, 1, 0)
 
-        self.cond_scale = QDoubleSpinBox(self.input_widget)
-        self.cond_scale.setRange(1.0, 20.00)
-        self.cond_scale.setValue(7.5)
+        # step spin box
+        self.stepBox = QSpinBox()
+        self.stepBox.setMinimum(5)
+        self.stepBox.setMaximum(150)
+        self.stepBox.setValue(32)
+        settingLayout.addWidget(self.stepBox, 1, 1)
 
-        self.input_layout.addRow("Prompt", self.prompt)
-        self.input_layout.addRow("Steps", self.steps)
-        self.input_layout.addRow("Random Seed", self.seed)
-        self.input_layout.addRow("Sketch-Strength", self.sketch_strengh)
-        self.input_layout.addRow("Cond-Scale", self.cond_scale)
+        # seed box label
+        seedBoxLabel = QLabel("Seed", SettingGroup)
+        settingLayout.addWidget(seedBoxLabel, 2, 0)
 
-        self.input_widget.setLayout(self.input_layout)
+        # seed spin box
+        self.seedBox = QSpinBox()
+        self.seedBox.setMinimum(-1)
+        self.seedBox.setMaximum(1000000000)
+        self.seedBox.setValue(-1)
+        settingLayout.addWidget(self.seedBox, 2, 1)
 
-        self.mainWidget.layout().addWidget(self.input_widget)
+        # strength box label
+        strengthBoxLabel = QLabel("Strength", SettingGroup)
+        settingLayout.addWidget(strengthBoxLabel, 3, 0)
 
-        # Endpoint Settings ===
-        self.endpoint_widget = QWidget(self.mainWidget)
-        self.endpoint_layout = QFormLayout()
+        # strength spin box
+        self.strengthBox = QDoubleSpinBox()
+        self.strengthBox.setMinimum(0.00)
+        self.strengthBox.setMaximum(1.00)
+        self.strengthBox.setSingleStep(0.05)
+        self.strengthBox.setValue(0.5)
+        settingLayout.addWidget(self.strengthBox, 3, 1)
 
-        self.endpoint = QLineEdit(self.endpoint_widget)
-        self.endpoint.setPlaceholderText("GPU Endpoint")
-        self.endpoint.setText("http://127.0.0.1:8888/api/img2img")
+        # cond scale box label
+        condScaleBoxLabel = QLabel("Cond-Scale", SettingGroup)
+        settingLayout.addWidget(condScaleBoxLabel, 4, 0)
 
-        self.endpoint_layout.addRow("Endpoint", self.endpoint)
-        self.endpoint_widget.setLayout(self.endpoint_layout)
-        self.mainWidget.layout().addWidget(self.endpoint_widget)
+        # cond scale spin box
+        self.condScaleBox = QDoubleSpinBox()
+        self.condScaleBox.setMinimum(0.00)
+        self.condScaleBox.setSingleStep(0.05)
+        self.condScaleBox.setMaximum(25.00)
+        self.condScaleBox.setValue(7.5)
 
-        # Dream button ===
-        self.dream = QPushButton(self.mainWidget)
-        self.dream.setText("Dream")
-        self.dream.clicked.connect(self.pingServer)
+        settingLayout.addWidget(self.condScaleBox, 4, 1)
 
-        self.mainWidget.layout().addWidget(self.dream)
+        # variations box label
+        variationsBoxLabel = QLabel("Variations", SettingGroup)
+        settingLayout.addWidget(variationsBoxLabel, 5, 0)
+
+        # variations spin box
+        self.variationsBox = QSpinBox()
+        self.variationsBox.setMinimum(1)
+        self.variationsBox.setMaximum(4)
+        self.variationsBox.setValue(1)
+
+        settingLayout.addWidget(self.variationsBox, 5, 1)
+        SettingGroup.setLayout(settingLayout)
+
+        # base url label
+        url_label = QLabel("URL", SettingGroup)
+        settingLayout.addWidget(url_label, 6, 0)
+
+        # base url
+        self.url = QLineEdit(SettingGroup)
+        self.url.setText("http://127.0.0.1:8888")
+        settingLayout.addWidget(self.url, 6, 1)
+
+        # === End Settings Area
+
+        # === Tool Area
+        ToolGroup = QGroupBox(mainWidget)
+        ToolGroup.setTitle("Tools")
+        toolLayout = QGridLayout()
+
+        selectionButton = QPushButton("New Selection", ToolGroup)
+        selectionButton.setIcon(Krita.instance().icon("tool_rect_selection"))
+        selectionButton.setContentsMargins(20, 0, 0, 0)
+        selectionButton.clicked.connect(make_selection)
+        toolLayout.addWidget(selectionButton, 0, 0)
+
+        ToolGroup.setLayout(toolLayout)
+        # === End Tool Area
+
+        # === Dream Area
+        DreamGroup = QGroupBox(mainWidget)
+        DreamGroup.setTitle("Dream")
+        toolLayout = QGridLayout()
+
+        # txt2img Button
+        txt2img = QPushButton("txt2img", DreamGroup)
+        txt2img.setContentsMargins(10, 0, 0, 0)
+        txt2img.clicked.connect(NOT_IMPLEMENTED)
+        toolLayout.addWidget(txt2img, 1, 0)
+
+        # img2img Button
+        img2img = QPushButton("img2img", DreamGroup)
+        img2img.setContentsMargins(10, 0, 0, 0)
+        img2img.clicked.connect(self.img2img)
+        toolLayout.addWidget(img2img, 1, 1)
+
+        # inpaint Button
+        inpaint = QPushButton("inpaint", DreamGroup)
+        inpaint.setContentsMargins(10, 0, 0, 0)
+        inpaint.clicked.connect(NOT_IMPLEMENTED)
+        toolLayout.addWidget(inpaint, 1, 2)
+
+        DreamGroup.setLayout(toolLayout)
+        # === End Dream Area
+
+        mainLayout.addWidget(PromptGroup, 0, 0)
+        mainLayout.addWidget(SettingGroup, 1, 0)
+        mainLayout.addWidget(ToolGroup, 2, 0)
+        mainLayout.addWidget(DreamGroup, 3, 0)
+        mainWidget.setLayout(mainLayout)
+        # === End Main Widget
 
     def canvasChanged(self, canvas):
         """
@@ -84,95 +183,60 @@ class Koi(DockWidget):
         """
         pass
 
-    def get_extra_args(self):
+    def get_headers(self, image=None):
         """
-        Take all input from user and construct a mapping object.
-
-        Return: Encoded bytes to send as data in post request.
+        Take all input from user and construct HTTP Headers.
         """
 
         headers = {
-            "Prompt": str(self.prompt.text()),
-            "Sample-Steps": str(self.steps.value()),
-            "Random-Seed": str(self.seed.value()),
-            "Image-Strength": str(1.0 - self.sketch_strengh.value()),
-            "Cond-Scale": str(self.cond_scale.value()),
-            "Batch-Size": "1", # TODO: add dialog
-            "Precision": "autocast", # TODO: add dialog
-            "Sampler": "euler_ancestral"
+            "Content-Type": "application/octet-stream",
+            "Prompt": str(self.promptText.toPlainText()),
+            "Sample-Steps": str(self.stepBox.value()),
+            "Random-Seed": str(self.seedBox.value()),
+            "Image-Strength": str(1.0 - self.strengthBox.value()),
+            "Cond-Scale": str(self.condScaleBox.value()),
+            "Batch-Size": str(self.variationsBox.value()),
+            "Sampler": str(self.samplerBox.currentText()),
+            "Height": 0,
+            "Width": 0,
         }
+
+        if exists(image):
+            headers.update({"Width": image.width(), "Height": image.height()})
 
         return headers
 
-    def get_endpoint(self):
-        return str(self.endpoint.text())
+    def img2img(self):
+        # get the current selection
+        selection = get_selection()
 
-    def get_next_layer_id(self):
-        self.ITER += 1
-        return f"dream_{self.ITER}"
+        if not exists(selection):
+            return
 
-    def pingServer(self):
-        # get the current layer as a I/O buffer
-        image_buffer = self.layer2buffer()
+        # get image from current selection
+        image = selection_to_image(selection=selection)
 
-        headers = self.get_extra_args()
-        headers.update({"Content-Type": "application/octet-stream"})
+        # turn that image into a buffer
+        buffer = image_to_buffer(image)
 
-        r = request.Request(url=self.get_endpoint(), data=image_buffer, headers=headers)
+        # build headers
+        headers = self.get_headers(image)
 
-        # wait for response and read image
-        with request.urlopen(r, timeout=60) as response:
-            returned_image = QImage.fromData(response.read())
+        # get the correct endpoint
+        endpoint = compile_endpoint(self.url.text(), action="img2img")
 
-        # create a new layer and add it to the document
-        application = Krita.instance()
-        doc = application.activeDocument()
-        root = doc.rootNode()
-        dream_layer = doc.createNode(self.get_next_layer_id(), "paintLayer")
-        root.addChildNode(dream_layer, None)
+        # make a request to the backend server
+        response_url = request.Request(url=endpoint, data=buffer, headers=headers)
 
-        # get a pointer to the image's bits and add them to the new layer
-        ptr = returned_image.bits()
-        ptr.setsize(returned_image.byteCount())
-        dream_layer.setPixelData(
-            QByteArray(ptr.asstring()),
-            0,
-            0,
-            returned_image.width(),
-            returned_image.height(),
-        )
+        # open the connection
+        with request.urlopen(response_url, timeout=TIMEOUT) as response:
 
-        # update user
-        doc.refreshProjection()
+            if response.status == 200:
+                # TODO: re-implement multiple dream return
+                image_to_layer(buffer_to_image(response), get_layer())
 
-    def layer2buffer(self):
-        """
-        Turns the current active layer into a I/O Buffer so that it can be sent over HTTP.
-        """
-        # get current document
-        currentDocument = Krita.instance().activeDocument()
-        width, height = (currentDocument.width(), currentDocument.height())
-
-        # get current layer
-        currentLayer = currentDocument.activeNode()
-
-        # get the pixel data
-        pixelData = currentLayer.pixelData(0, 0, width, height)
-
-        # construct QImage
-        qImage = QImage(pixelData, width, height, QImage.Format_RGBA8888)
-        qImage = qImage.rgbSwapped()
-
-        # now make a buffer and save the image into it
-        buffer = QBuffer()
-        buffer.open(QIODevice.ReadWrite)
-        qImage.save(buffer, format="PNG")
-
-        # write the data into a buffer and jump to start of file
-        image_byte_buffer = BytesIO()
-        image_byte_buffer.write(buffer.data())
-        image_byte_buffer.read()
-        buffer.close()
-        image_byte_buffer.seek(0)
-
-        return image_byte_buffer
+            else:
+                ERROR(
+                    f"Server Error: {response.status}",
+                    "Something went wrong on the server side, check server's output.",
+                )

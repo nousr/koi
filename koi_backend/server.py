@@ -28,7 +28,7 @@ def header_to_sample_args(headers):
         "Precision": str,
         "Random-Seed": int,
         "Prompt": str,
-        "Sampler": str
+        "Sampler": str,
     }
 
     args = {}
@@ -175,7 +175,9 @@ def main(host, port, use_ngrok, sd_checkpoint_path, sd_config_path):
     global model
 
     click.secho(f"Loading Default Model...", fg="yellow")
-    model = harness.StableDiffusionHarness(checkpoint_path=sd_checkpoint_path, config_path=sd_config_path)
+    model = harness.StableDiffusionHarness(
+        checkpoint_path=sd_checkpoint_path, config_path=sd_config_path
+    )
     click.secho("Done!", fg="green")
 
     if use_ngrok:

@@ -13,6 +13,7 @@ from einops import rearrange, repeat
 from PIL import Image
 from torch import autocast
 
+
 class CFGDenoiser(torch.nn.Module):
     def __init__(self, model):
         super().__init__()
@@ -24,6 +25,7 @@ class CFGDenoiser(torch.nn.Module):
         cond_in = torch.cat([uncond, cond])
         uncond, cond = self.inner_model(x_in, sigma_in, cond=cond_in).chunk(2)
         return uncond + (cond - uncond) * cond_scale
+
 
 def exists(x):
     return x is not None
@@ -61,7 +63,9 @@ def get_sampler(sampler_name):
     """
 
     sampler_name = "sample_" + sampler_name
-    assert hasattr(k_samplers.sampling, sampler_name), f"The {sampler_name} sampler does not exist."
+    assert hasattr(
+        k_samplers.sampling, sampler_name
+    ), f"The {sampler_name} sampler does not exist."
     return getattr(k_samplers.sampling, sampler_name)
 
 
@@ -98,7 +102,9 @@ def img2img(model, sample_args):
     t_enc = int(sample_args["Image-Strength"] * sample_args["Sample-Steps"])
 
     # context
-    precision_scope = autocast if sample_args["Precision"] == "autocast" else nullcontext
+    precision_scope = (
+        autocast if sample_args["Precision"] == "autocast" else nullcontext
+    )
 
     # set seed
     torch.manual_seed(sample_args["Random-Seed"])
@@ -111,7 +117,11 @@ def img2img(model, sample_args):
 
             # prepare the init image
             init_image = preprocess_image(sample_args["Init-Image"])
-            x0 = get_init_latent(init_image=init_image, batch_size=int(sample_args["Batch-Size"]), model=model)
+            x0 = get_init_latent(
+                init_image=init_image,
+                batch_size=int(sample_args["Batch-Size"]),
+                model=model,
+            )
 
             # get learned conditioning
             uc = None
@@ -121,14 +131,22 @@ def img2img(model, sample_args):
 
             # setup
             sigmas = wrapped_model.get_sigmas(sample_args["Sample-Steps"])
-            noise = torch.randn_like(x0) * sigmas[sample_args["Sample-Steps"] - t_enc - 1]
+            noise = (
+                torch.randn_like(x0) * sigmas[sample_args["Sample-Steps"] - t_enc - 1]
+            )
             xi = x0 + noise
             sigma_sched = sigmas[sample_args["Sample-Steps"] - t_enc - 1 :]
             model_wrap_cfg = CFGDenoiser(wrapped_model)
-            extra_args = {"cond": c, "uncond": uc, "cond_scale": sample_args["Cond-Scale"]}
+            extra_args = {
+                "cond": c,
+                "uncond": uc,
+                "cond_scale": sample_args["Cond-Scale"],
+            }
 
             # sample
-            samples_ddim = sampler(model_wrap_cfg, xi, sigma_sched, extra_args=extra_args)
+            samples_ddim = sampler(
+                model_wrap_cfg, xi, sigma_sched, extra_args=extra_args
+            )
 
             # decode results
             x_samples_ddim = model.decode_first_stage(samples_ddim)
@@ -136,7 +154,9 @@ def img2img(model, sample_args):
 
             for x_sample in x_samples_ddim:
                 # scale to proper pixel values & convert to PIL Image
-                x_sample = 255.0 * rearrange(x_sample.detach().cpu().numpy(), "c h w -> h w c")
+                x_sample = 255.0 * rearrange(
+                    x_sample.detach().cpu().numpy(), "c h w -> h w c"
+                )
                 samples.append(Image.fromarray(x_sample.astype(np.uint8)))
 
     toc = time.time()
