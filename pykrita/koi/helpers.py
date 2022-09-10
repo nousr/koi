@@ -129,7 +129,7 @@ def refresh_projection():
     get_document().refreshProjection()
 
 
-def image_to_layer(image, layer):
+def image_to_layer(image, layer, x, y):
     """
     Place an image on the layer
     """
@@ -138,8 +138,10 @@ def image_to_layer(image, layer):
         ptr.setsize(image.byteCount())
 
         layer.setPixelData(
-            QByteArray(ptr.asstring()), 0, 0, image.width(), image.height(),
+            QByteArray(ptr.asstring()), x, y, image.width(), image.height(),
         )
+
+        refresh_projection()
 
     except Exception as e:
         ERROR("Unable to paste pixels", f"{e}")

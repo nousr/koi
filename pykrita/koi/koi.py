@@ -34,7 +34,7 @@ class Koi(DockWidget):
 
         self.promptText = QPlainTextEdit(PromptGroup)
         self.promptText.setPlainText(
-            "A txt2img of a distant galaxy, by Caspar David Friedrich, matte painting trending on artstation HQ"
+            "A beautiful painting of a distant galaxy, by Caspar David Friedrich, matte painting trending on artstation HQ"
         )
         promptLayout.addWidget(self.promptText, 1, 0)
 
@@ -230,10 +230,10 @@ class Koi(DockWidget):
 
         # open the connection
         with request.urlopen(response_url, timeout=TIMEOUT) as response:
-
             if response.status == 200:
                 # TODO: re-implement multiple dream return
-                image_to_layer(buffer_to_image(response), get_layer())
+                image = buffer_to_image(response)
+                image_to_layer(image, get_layer(), x=selection.x(), y=selection.y())
 
             else:
                 ERROR(
