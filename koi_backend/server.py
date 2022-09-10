@@ -39,13 +39,21 @@ def header_to_sample_args(headers):
 
 
 def data_to_pil(data):
-    return Image.open(BytesIO(data))
+    image = Image.open(BytesIO(data))
+
+    # save temp img for debugging
+    image.save("image_in.png")
+
+    return image
 
 
 def pil_to_data(image):
     """
     Store the image data in a file.
     """
+    # save output image for debugging
+    image.save("image_out.png")
+
     return_bytes = BytesIO()
     image.save(return_bytes, format="PNG")
     return_bytes.read()

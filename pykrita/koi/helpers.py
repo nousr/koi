@@ -97,7 +97,7 @@ def selection_to_image(selection):
     """
     Get the current pixels from the selection.
     """
-    
+
     # get current document
     doc = get_document()
 
