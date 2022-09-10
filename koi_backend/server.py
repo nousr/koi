@@ -65,6 +65,7 @@ def build_archive(samples, prompt):
 
     zip_stream.seek(0)
 
+    return zip_stream
 
 def pil_to_data(image):
     """
