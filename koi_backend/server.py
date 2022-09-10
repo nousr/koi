@@ -1,5 +1,7 @@
+import enum
 import json
 from io import BytesIO
+from zipfile import ZipFile
 
 import click
 from PIL import Image
@@ -45,6 +47,23 @@ def data_to_pil(data):
     image.save("image_in.png")
 
     return image
+
+
+def get_name(prompt, seed):
+    return f"{prompt}_{seed}"
+
+
+def build_archive(samples, prompt):
+    zip_stream = BytesIO()
+
+    with ZipFile(zip_stream, "w") as zf:
+        for index, sample in enumerate(samples):
+            return_bytes = BytesIO()
+            sample.save(return_bytes, format="PNG")
+            return_bytes.seek(0)
+            zf.writestr(get_name(prompt, index), return_bytes.read())
+
+    zip_stream.seek(0)
 
 
 def pil_to_data(image):
@@ -144,12 +163,9 @@ def img2img():
     # sample from model
     samples = model.img2img(sample_args=sample_args)
 
-    # TODO: support multiple images being returned
-    return_image = samples[0]
+    archive = build_archive(samples, prompt=sample_args["Prompt"])
 
-    image_bytes = pil_to_data(image=return_image)
-
-    return send_file(image_bytes, mimetype="image/png")
+    return send_file(archive, mimetype="application/zip")
 
 
 @app.route("/api/txt2img", methods=["POST"])

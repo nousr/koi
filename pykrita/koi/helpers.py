@@ -1,4 +1,5 @@
 from io import BytesIO
+from zipfile import ZipFile
 
 from krita import Krita, Selection
 from PyQt5.QtCore import QBuffer, QIODevice, QByteArray
@@ -35,6 +36,15 @@ def get_layer():
 
     n = get_document().activeNode()
     return n if exists(n) else None
+
+
+def new_layer(name):
+    """
+    Create a new layer.
+    """
+
+    doc = get_document()
+    return doc.createNode(name, "paintLayer")
 
 
 def get_selection():
@@ -129,7 +139,7 @@ def refresh_projection():
     get_document().refreshProjection()
 
 
-def image_to_layer(image, layer, x, y):
+def paste_image(image, layer, x, y):
     """
     Place an image on the layer
     """
@@ -185,3 +195,7 @@ def compile_endpoint(base_url, action):
     return ERROR(
         "Bad Endpoint", "You have requesetd and endpoint that is not supported."
     )
+
+
+def read_zip(response):
+    return ZipFile(BytesIO(response.read()))

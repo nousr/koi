@@ -1,22 +1,27 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from krita import DockWidget, Krita
+import re
 from urllib import request
+
+from krita import DockWidget, Krita
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+
 from koi.helpers import (
-    make_selection,
-    NOT_IMPLEMENTED,
-    selection_to_image,
-    image_to_buffer,
-    get_selection,
-    image_to_layer,
-    get_layer,
-    buffer_to_image,
-    exists,
-    compile_endpoint,
     ERROR,
+    NOT_IMPLEMENTED,
+    buffer_to_image,
+    compile_endpoint,
+    exists,
+    get_selection,
+    image_to_buffer,
+    new_layer,
+    make_selection,
+    selection_to_image,
+    paste_image,
+    read_zip,
 )
 
 TIMEOUT = 60  # maximum seconds to wait for response from server
+ITER = 0  # protect against duplicate layer names
 
 
 class Koi(DockWidget):
@@ -206,6 +211,10 @@ class Koi(DockWidget):
 
         return headers
 
+    def _next_layer_id(self):
+        self.ITER += 1
+        return self.ITER
+
     def img2img(self):
         # get the current selection
         selection = get_selection()
@@ -231,9 +240,16 @@ class Koi(DockWidget):
         # open the connection
         with request.urlopen(response_url, timeout=TIMEOUT) as response:
             if response.status == 200:
-                # TODO: re-implement multiple dream return
-                image = buffer_to_image(response)
-                image_to_layer(image, get_layer(), x=selection.x(), y=selection.y())
+                archive = read_zip(response)
+
+                for name in archive.namelist():
+                    file = archive.read(name)
+                    image = buffer_to_image(file)
+
+                    layer = new_layer(name)
+
+                    # paint image onto the layer
+                    paste_image(image, layer, selection.x(), selection.y())
 
             else:
                 ERROR(
