@@ -47,11 +47,12 @@ class Koi(DockWidget):
         self.variations.setRange(1, 8)
         self.variations.setValue(1)
 
-        self.base_seed_min = 1
+        self.base_seed_min = 0
         self.base_seed_max = 100000000
         self.base_seed = QSpinBox(self.input_widget)
-        self.base_seed.setRange(self.base_seed_min, self.base_seed_max)
+        self.base_seed.setRange(self.base_seed_min-1, self.base_seed_max) #let -1 choosable
         self.base_seed.setValue(1337)
+        self.base_seed.setToolTip('If set to -1, then the seed will be randomized in the background.')
 
         self.sketch_strengh = QDoubleSpinBox(self.input_widget)
         self.sketch_strengh.setRange(0.05, 0.95)
@@ -73,16 +74,9 @@ class Koi(DockWidget):
 
         self.mainWidget.layout().addWidget(self.input_widget)
 
-        # Randomize seed button ===
-        self.random = QPushButton(self.mainWidget)
-        self.random.setText("Randomize Seed")
-        self.random.clicked.connect(self.randomizeSeed)
-
-        self.mainWidget.layout().addWidget(self.random)
-
         # Auto random seed checkbox ===
         self.auto_random = QCheckBox(self.mainWidget)
-        self.auto_random.setText("Auto randomize after Dream")
+        self.auto_random.setText("Auto randomize seed after Dream")
 
         self.mainWidget.layout().addWidget(self.auto_random)
 
@@ -125,7 +119,7 @@ class Koi(DockWidget):
             "variations": str(self.variations.value()),
             "prompt": self._prompt_text(),
             "steps": str(self.steps.value()),
-            "seed": str(self.base_seed.value()),
+            "seed": str(self.getRandSeed() if self.base_seed.value()==-1 else self.base_seed.value()),
             "sketch_strength": str(self.sketch_strengh.value()),
             "prompt_strength": str(self.prompt_strength.value()),
         }
@@ -160,8 +154,8 @@ class Koi(DockWidget):
     def _get_timeout(self):
         return int(1.5 * self.steps.value()) * self.variations.value()
 
-    def randomizeSeed(self):
-        self.base_seed.setValue(random.randint(self.base_seed_min,self.base_seed_max-self.variations.value()))
+    def getRandSeed(self):
+        return random.randint(self.base_seed_min,self.base_seed_max-self.variations.value())
 
     def pingServer(self):
         # get the current layer as a I/O buffer
@@ -188,7 +182,7 @@ class Koi(DockWidget):
 
         # check for auto random needed
         if self.auto_random.isChecked():
-            self.randomizeSeed()
+            self.base_seed.setValue(self.getRandSeed())
 
         # update user
         doc.refreshProjection()
