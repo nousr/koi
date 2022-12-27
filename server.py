@@ -18,6 +18,8 @@ pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
     # TODO: detect if there's 8G VRAM before we enable this model
     revision="fp16",
     torch_dtype=torch.float16,
+    safety_checker=None,
+    requires_safety_checker=False,
 ).to("cuda")
 
 secho("Finished!", fg="green")
@@ -68,7 +70,7 @@ def img2img():
                     strength=float(headers["sketch_strength"]),
                     guidance_scale=float(headers["prompt_strength"]),
                     num_inference_steps=int(headers["steps"]),
-                )["sample"][0]
+                ).images[0]
 
 
             return_bytes = BytesIO()
