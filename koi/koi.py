@@ -6,6 +6,7 @@ from urllib import request
 from io import BytesIO
 from zipfile import ZipFile
 import re
+import random
 
 class Koi(DockWidget):
     def __init__(self):
@@ -18,6 +19,9 @@ class Koi(DockWidget):
         self.ITER = 0
 
         self.setWindowTitle("Koi")
+
+        # Initializing random seed ===
+        random.seed(None) 
 
         # Main WIdget ===
         self.mainWidget = QWidget(self)
@@ -43,9 +47,12 @@ class Koi(DockWidget):
         self.variations.setRange(1, 8)
         self.variations.setValue(1)
 
+        self.base_seed_min = 0
+        self.base_seed_max = 100000000
         self.base_seed = QSpinBox(self.input_widget)
-        self.base_seed.setRange(1, 100000000)
+        self.base_seed.setRange(self.base_seed_min-1, self.base_seed_max) #let -1 choosable
         self.base_seed.setValue(1337)
+        self.base_seed.setToolTip('If set to -1, then the seed will be randomized in the background.')
 
         self.sketch_strengh = QDoubleSpinBox(self.input_widget)
         self.sketch_strengh.setRange(0.05, 0.95)
@@ -66,6 +73,12 @@ class Koi(DockWidget):
         self.input_widget.setLayout(self.input_layout)
 
         self.mainWidget.layout().addWidget(self.input_widget)
+
+        # Auto random seed checkbox ===
+        self.auto_random = QCheckBox(self.mainWidget)
+        self.auto_random.setText("Auto randomize seed after Dream")
+
+        self.mainWidget.layout().addWidget(self.auto_random)
 
         # Endpoint Settings ===
         self.endpoint_widget = QWidget(self.mainWidget)
@@ -106,7 +119,7 @@ class Koi(DockWidget):
             "variations": str(self.variations.value()),
             "prompt": self._prompt_text(),
             "steps": str(self.steps.value()),
-            "seed": str(self.base_seed.value()),
+            "seed": str(self.getRandSeed() if self.base_seed.value()==-1 else self.base_seed.value()),
             "sketch_strength": str(self.sketch_strengh.value()),
             "prompt_strength": str(self.prompt_strength.value()),
         }
@@ -141,6 +154,9 @@ class Koi(DockWidget):
     def _get_timeout(self):
         return int(1.5 * self.steps.value()) * self.variations.value()
 
+    def getRandSeed(self):
+        return random.randint(self.base_seed_min,self.base_seed_max-self.variations.value())
+
     def pingServer(self):
         # get the current layer as a I/O buffer
         image_buffer = self.layer2buffer()
@@ -163,6 +179,10 @@ class Koi(DockWidget):
             
                 returned_file = QImage.fromData(file)
                 self._add_paint_layer(doc, root, returned_file, name)                
+
+        # check for auto random needed
+        if self.auto_random.isChecked():
+            self.base_seed.setValue(self.getRandSeed())
 
         # update user
         doc.refreshProjection()
