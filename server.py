@@ -14,7 +14,7 @@ secho("Loading Model...", fg="yellow")
 
 # FIXME: more elegant model scope
 pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-    "CompVis/stable-diffusion-v1-4", use_auth_token=True,
+    "CompVis/stable-diffusion-v1-5", use_auth_token=True,
     revision="fp16",
     torch_dtype=torch.float16,
     safety_checker=None,
