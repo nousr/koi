@@ -64,7 +64,7 @@ def img2img():
         
             with autocast("cuda"):
                 return_image = pipe(
-                    init_image=img,
+                    image=img,
                     prompt=prompt,
                     strength=float(headers["sketch_strength"]),
                     guidance_scale=float(headers["prompt_strength"]),
