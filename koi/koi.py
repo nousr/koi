@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QImage
+import krita
 from krita import DockWidget, Krita
 from urllib import request
 from io import BytesIO

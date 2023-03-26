@@ -14,7 +14,7 @@ secho("Loading Model...", fg="yellow")
 
 # FIXME: more elegant model scope
 pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-    "CompVis/stable-diffusion-v1-4", use_auth_token=True,
+    "runwayml/stable-diffusion-v1-5", use_auth_token=True,
     revision="fp16",
     torch_dtype=torch.float16,
     safety_checker=None,
@@ -64,7 +64,7 @@ def img2img():
         
             with autocast("cuda"):
                 return_image = pipe(
-                    init_image=img,
+                    image=img,
                     prompt=prompt,
                     strength=float(headers["sketch_strength"]),
                     guidance_scale=float(headers["prompt_strength"]),
